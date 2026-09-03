@@ -1,0 +1,5 @@
+Center (converged root): 0.3775148115 -0.0208716540i
+Contour radius: 0.0003
+Number of contour points: 24
+Winding number: 1.000000
+Interpretation: winding=1 indicates a simple isolated pole.
