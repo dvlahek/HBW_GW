@@ -1,0 +1,2 @@
+root_omega_re,root_omega_im,lambda1_re,lambda1_im,lambda2_re,lambda2_im,relative_sv_lambda1,relative_sv_lambda2,lambda_sum,expected_sum_note
+0.3775148114965411,-0.020871653994053295,-0.09400178012840704,0.07339734555319015,-0.12822044209381567,-0.07339734555318785,7.305320920290712e-15,5.836450496079331e-15,-0.2222222222222227,not independently constrained to -2/9 in this blind derivation; check is via full 7x4 SVD residual only
