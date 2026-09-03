@@ -2,7 +2,7 @@
 
 Numerical code and compact audit data for our study of polar perturbations of smooth, self-gravitating massless Einstein--Vlasov atmospheres around Schwarzschild black holes.
 
-The repository is intentionally small. It contains the verified scripts used for the final global mode calculation, two cached spectral datasets used in the source-coupling check, and the numerical tables that support the main robustness statements. Development runs and manuscript files are not included.
+This repository is intentionally small. It contains the verified scripts used for the final global mode and source-coupling calculations together with the tables that support the main numerical claims. Development runs and manuscript files are not included.
 
 ## Main numerical result
 
@@ -12,25 +12,25 @@ For the smooth atmosphere with mass ratio `q = 0.1`, the matter-led polar mode i
 M omega = 0.377514814460 - 0.020871654486 i
 ```
 
-The same mode is recovered in independently constructed smooth atmospheres at
+The mode is also recovered in independently constructed smooth atmospheres at
 
 ```text
 q = 0.05, 0.075, 0.10, 0.15, 0.20
 ```
 
-with unit argument-principle winding and stable global boundary-condition audits. The tabulated values are in `results/q_family_results.csv`.
+with unit argument-principle winding and stable global boundary-condition audits. The accepted family is listed in `results/q_family_results.csv`.
 
-We also tested direct source coupling at `q = 0.10` and `q = 0.20`. Localized polar sources placed entirely in the outer Schwarzschild vacuum have non-zero overlap with the matter-led pole and finite retarded Green-function residues. These results are summarized in `results/source_excitation_summary.csv`.
+At `q = 0.10` and `q = 0.20` we additionally tested direct source coupling. Localized polar sources placed entirely in the outer Schwarzschild vacuum have non-zero overlap with the matter-led pole and finite retarded Green-function residues. The compact results are in `results/source_excitation_summary.csv`, `results/point_source_residues.csv`, and `results/smooth_source_residues.csv`.
 
 ## Repository layout
 
 ```text
 code/       verified calculation scripts
-data/       cached spectral inputs for q=0.10 and q=0.20
 results/    compact publication-facing audit tables
+data/       note on archived spectral caches
 ```
 
-The filenames in `code/` retain the internal phase labels used during verification. They are kept unchanged so the public files can be traced directly to the successful numerical runs.
+The filenames in `code/` retain the internal phase labels used during verification. They are kept unchanged so that the public files can be traced directly to the successful numerical runs.
 
 ## Environment
 
@@ -40,30 +40,12 @@ Python 3.11 or newer is recommended.
 python -m pip install -r requirements.txt
 ```
 
-## Reproducing the q = 0.1 global mode
+The final global solver is `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is `code/hbh_np_source_excitation_test_v2.py`.
 
-Run
+The large spectral-node caches used by these scripts are not committed to this minimal Git repository. They will be deposited with the archival dataset accompanying the paper. Small numerical outputs needed to inspect the reported results are included under `results/`.
 
-```bash
-python reproduce_q010.py
-```
+## Scope
 
-This rebuilds the small C7/C8 input archives expected by the verified global solver and runs the final smooth QNM calculation from the cached `q=0.1` spectral data.
-
-## Reproducing the source-coupling test
-
-Run
-
-```bash
-python reproduce_source_coupling.py
-```
-
-This assembles a minimal two-case family archive from the cached `q=0.10` and `q=0.20` spectral data and executes the verified retarded Green-function source-coupling calculation.
-
-The generated pole contribution is a linear source-coupling diagnostic. It is not a merger waveform or a detector-sensitivity forecast.
-
-## Notes on scope
-
-The repository reports the publication-grade family through `q=0.20`. Exploratory calculations outside that verified range are deliberately not included here.
+The repository reports the publication-grade family through `q = 0.20`. Exploratory calculations outside that verified range are deliberately not included.
 
 A manuscript citation and archival data DOI will be added with the paper.
