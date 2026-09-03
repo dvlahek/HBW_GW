@@ -26,13 +26,13 @@ At `q = 0.10` and `q = 0.20`, localized polar sources placed entirely in the out
 
 A Chebyshev pseudospectral boundary-value implementation reproduces the `q = 0.1` global pole without using the transfer-matrix, homotopy, or exterior-complex-scaling machinery of the primary solver. The two calculations agree in complex frequency to `1.4e-8`. The solver is in `code/independent_pseudospectral_qnm.py`.
 
-A second, deliberately blind from-scratch real-axis multiple-shooting implementation was not supplied the target matter-mode frequency or production solver. After searching the prescribed complex-frequency window it recovered
+A second, deliberately blind from-scratch real-axis multiple-shooting implementation was not supplied the target matter-mode frequency, manuscript, or production solver. After searching the prescribed complex-frequency window it recovered
 
 ```text
 M omega = 0.377514811497 - 0.020871653994 i
 ```
 
-which differs from the primary result by `3.0e-9`; its winding number is one and the full bulk relative singular-value residuals are below `8e-15`. The compact summary is in `results/blind_multiple_shooting_reproduction.csv`. The complete blind source package and all attempted seeds/audits are supplied with the manuscript as Supplementary Code 1.
+which differs from the primary result by `3.0e-9`; its winding number is one and the full bulk relative singular-value residuals are below `8e-15`. This blind implementation was generated with a large-language-model coding assistant under an author-specified protocol and was subsequently inspected and numerically audited by the author. The compact summary is in `results/blind_multiple_shooting_reproduction.csv`. The complete blind source package and all attempted seeds/audits are supplied with the manuscript as Supplementary Code 1.
 
 ## Repository layout
 
