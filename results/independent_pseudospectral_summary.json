@@ -1,0 +1,16 @@
+{
+  "verdict": "INDEPENDENT_PSEUDOSPECTRAL_REPRODUCTION_PASS",
+  "reference_root": [
+    0.37751481446,
+    -0.020871654486
+  ],
+  "resolutions": [48, 64, 80],
+  "final_resolution_shift": 0.0,
+  "match_reference_within_1e-4": true,
+  "resolution_converged": true,
+  "matching_residual_gate": true,
+  "bulk_7x4_gate": true,
+  "pseudospectral_BVP_gate": true,
+  "three_seed_same_root_gate": true,
+  "scope_note": "This is an independent numerical-method validation of the global boundary-value problem, using the same physical Einstein--Vlasov constitutive response. It is not an external reproduction by another group."
+}
