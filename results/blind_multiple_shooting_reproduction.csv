@@ -1,0 +1,2 @@
+root_re,root_im,abs_difference_from_primary,winding,schwarzschild_relative_error,bulk_relative_sv_1,bulk_relative_sv_2,method
+0.3775148114965,-0.0208716539941,3.00e-09,1.000000,1.19e-05,7.31e-15,5.84e-15,"blind real-axis Riccati multiple shooting"
