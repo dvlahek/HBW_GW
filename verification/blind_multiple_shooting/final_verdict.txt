@@ -1,0 +1,45 @@
+BLIND QNM VERIFICATION - FINAL VERDICT
+======================================
+
+1. Schwarzschild benchmark
+   PASS at the production resolution Rmax=40. Relative complex error for the
+   l=2 fundamental Zerilli QNM is 1.19e-5, below the 1e-4 gate.
+
+2. Stable candidates in the blind matter search window
+   ONE.
+
+3. Complex frequency
+   M omega = 0.3775148115 - 0.0208716540 i
+
+   Nine seed/lambda-pair combinations converged to the same neighbourhood.
+   All attempted seeds, including failures, are reported in
+   all_frequency_seeds.csv.
+
+4. Outer-boundary stability
+   |D| = 8.9e-7 at Rmax=25,
+         6.4e-8 at Rmax=40,
+         9.2e-8 at Rmax=60.
+
+5. Full 7x4 bulk SVD residuals
+   7.3e-15 and 5.8e-15 for the two physical radial roots.
+   Their sum is -0.222222222... = -2/9, although this relation was not
+   imposed in the blind derivation.
+
+6. Was the target matter-QNM frequency supplied before the search?
+   NO.
+
+7. Numerical method
+   Real-axis Riccati multiple shooting for both vacuum regions with
+   scipy.integrate.solve_ivp. No exterior complex scaling and no Chebyshev
+   boundary-value solver are used. The Einstein--Vlasov bulk matrix is
+   separately derived symbolically, and chi_J(omega), chi_X(omega) are
+   evaluated from the supplied spectral nodes at every trial frequency.
+
+Additional audit
+   A 24-point argument-principle contour gives winding number 1.000000.
+
+The verification was performed within the PiPi institutional research project
+at the Faculty of Organization and Informatics. Anthropic Claude was used as
+a coding assistant during implementation. The researchers defined the blind
+protocol and validation criteria and inspected the code and audit outputs
+before unblinding.
