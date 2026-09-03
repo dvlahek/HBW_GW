@@ -2,7 +2,7 @@
 
 Numerical code and compact audit data for our study of polar perturbations of smooth, self-gravitating massless Einstein--Vlasov atmospheres around Schwarzschild black holes.
 
-This repository is intentionally small. It contains the verified scripts used for the final global mode and source-coupling calculations together with the tables that support the main numerical claims. Development runs and manuscript files are not included.
+This repository is intentionally small. It contains publication-facing modules distilled from the verified calculation pipeline together with the tables that support the main numerical claims. Development runs and manuscript files are not included.
 
 ## Main numerical result
 
@@ -25,12 +25,12 @@ At `q = 0.10` and `q = 0.20` we additionally tested direct source coupling. Loca
 ## Repository layout
 
 ```text
-code/       verified calculation scripts
-results/    compact publication-facing audit tables
+code/       publication-facing calculation modules
+results/    compact numerical audit tables
 data/       note on archived spectral caches
 ```
 
-The filenames in `code/` retain the internal phase labels used during verification. They are kept unchanged so that the public files can be traced directly to the successful numerical runs.
+The filenames in `code/` retain the internal phase labels used during verification so that the modules can be traced to the corresponding successful numerical stages. Development orchestration, exploratory scans, and failed branches have been removed from the public version.
 
 ## Environment
 
@@ -40,9 +40,9 @@ Python 3.11 or newer is recommended.
 python -m pip install -r requirements.txt
 ```
 
-The final global solver is `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is `code/hbh_np_source_excitation_test_v2.py`.
+The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`.
 
-The large spectral-node caches used by these scripts are not committed to this minimal Git repository. They will be deposited with the archival dataset accompanying the paper. Small numerical outputs needed to inspect the reported results are included under `results/`.
+The large spectral-node caches used by these calculations are not committed to this minimal Git repository. They will be deposited with the archival dataset accompanying the paper. Small numerical outputs needed to inspect the reported results are included under `results/`.
 
 ## Scope
 
