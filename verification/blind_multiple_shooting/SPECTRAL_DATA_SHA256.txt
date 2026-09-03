@@ -1,0 +1,8 @@
+blind_q010_spectral_nodes.npz
+size_bytes = 1397488
+sha256 = 04016df710591f61023338b20117b9b3fd046f4fc3ca886060f2b4a951d9114f
+
+Expected NumPy keys:
+nu_J, q_JJ, q_JX, n_r, n_phi, shell_J, nu_H, q_HH, shell_H
+
+This checksum identifies the publication-resolution q=0.1 spectral-node input used by the blind multiple-shooting verification.
