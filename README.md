@@ -22,6 +22,8 @@ with unit argument-principle winding and stable global boundary-condition audits
 
 At `q = 0.10` and `q = 0.20` we additionally tested direct source coupling. Localized polar sources placed entirely in the outer Schwarzschild vacuum have non-zero overlap with the matter-led pole and finite retarded Green-function residues. The compact results are in `results/source_excitation_summary.csv`, `results/point_source_residues.csv`, and `results/smooth_source_residues.csv`.
 
+As a separate numerical-method check, the `q = 0.1` global pole was reproduced with a Chebyshev pseudospectral boundary-value solver that does not use the transfer-matrix, homotopy, or exterior-complex-scaling machinery of the primary calculation. The two implementations agree in the complex frequency to `1.4e-8`. The solver is in `code/independent_pseudospectral_qnm.py`; its resolution and seed audits are under `results/`.
+
 ## Repository layout
 
 ```text
@@ -40,7 +42,7 @@ Python 3.11 or newer is recommended.
 python -m pip install -r requirements.txt
 ```
 
-The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`.
+The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`. The independent global-boundary reproduction is in `code/independent_pseudospectral_qnm.py`.
 
 The large spectral-node caches used by these calculations are not committed to this minimal Git repository. They will be deposited with the archival dataset accompanying the paper. Small numerical outputs needed to inspect the reported results are included under `results/`.
 
