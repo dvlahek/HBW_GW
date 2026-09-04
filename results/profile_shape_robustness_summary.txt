@@ -1,0 +1,15 @@
+HBH_PROFILE_SHAPE_ROBUSTNESS_PASS
+
+Interpretation:
+This is a controlled microscopic response-profile robustness test.
+It does not by itself constitute a second self-consistent stationary Einstein--Vlasov family.
+PASS means the same simple global matter-led pole survives all smooth shell-profile deformations,
+with unit winding, full-bulk residual control, and stable outer-vacuum matching.
+
+baseline: omega=0.377514802360-0.020871645263i, rel_shift=4.0240e-08, winding=1.000000, pass=True
+tilt_plus: omega=0.377516531577-0.020870613063i, rel_shift=5.3115e-06, winding=1.000000, pass=True
+tilt_minus: omega=0.377512719087-0.020872900282i, rel_shift=6.4475e-06, winding=1.000000, pass=True
+center_plus: omega=0.377513248974-0.020872577638i, rel_shift=4.8068e-06, winding=1.000000, pass=True
+center_minus: omega=0.377516330946-0.020870733066i, rel_shift=4.6932e-06, winding=1.000000, pass=True
+two_lobe_plus: omega=0.377515994834-0.020870941687i, rel_shift=3.6470e-06, winding=1.000000, pass=True
+two_lobe_minus: omega=0.377513587234-0.020872370919i, rel_shift=3.7585e-06, winding=1.000000, pass=True
