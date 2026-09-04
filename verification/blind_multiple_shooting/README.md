@@ -38,14 +38,14 @@ and audits were complete.
 
 ## Reproducing the verification
 
-Place the publication-resolution file
+The publication-resolution spectral input is included in this directory as
 
 ```text
 blind_q010_spectral_nodes.npz
 ```
 
-in this directory. Its expected SHA256 checksum is stored in
-`SPECTRAL_DATA_SHA256.txt` and can be checked with
+Its expected size is `1,397,488` bytes. The expected SHA256 checksum is stored
+in `SPECTRAL_DATA_SHA256.txt` and can be checked with
 
 ```bash
 python verify_spectral_input.py
@@ -83,6 +83,7 @@ Compact publication results are also stored in
 
 ## Files
 
+- `blind_q010_spectral_nodes.npz` - publication-resolution spectral input.
 - `independent_solver.py` - global multiple-shooting condition.
 - `bulk_blind.py` - separately derived Einstein--Vlasov bulk system.
 - `spectral.py` - retarded spectral continuation.
