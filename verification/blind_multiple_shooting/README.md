@@ -38,15 +38,19 @@ and audits were complete.
 
 ## Reproducing the verification
 
-Install the Python dependencies from the repository root and place the
-publication-resolution file
+Place the publication-resolution file
 
 ```text
 blind_q010_spectral_nodes.npz
 ```
 
-in this directory. The spectral file is distributed as Supplementary Data 1
-with the manuscript because it is not kept in this minimal Git repository.
+in this directory. Its expected SHA256 checksum is stored in
+`SPECTRAL_DATA_SHA256.txt` and can be checked with
+
+```bash
+python verify_spectral_input.py
+```
+
 Then run
 
 ```bash
@@ -57,6 +61,26 @@ python winding_audit.py
 The first command performs the full seed search and writes the root-search and
 resolution tables. The second performs the argument-principle winding audit.
 
+## Microscopic response-profile robustness
+
+The same spectral input can be used for an additional robustness test in which
+the microscopic shell-wise response weights are redistributed smoothly while
+the verified equilibrium background is held fixed. Run
+
+```bash
+python profile_shape_robustness.py
+```
+
+The script tests baseline, tilt, central, and two-lobe response profiles. In the
+publication run the shell weights span approximately `0.68` to `1.39`; all
+seven cases retain unit winding and the largest relative complex-frequency
+shift is `6.45e-6`. This is a response-profile robustness test and not a second
+self-consistent stationary Einstein--Vlasov family.
+
+Compact publication results are also stored in
+`../../results/profile_shape_robustness.csv` and
+`../../results/profile_shape_robustness_stability.csv`.
+
 ## Files
 
 - `independent_solver.py` - global multiple-shooting condition.
@@ -64,6 +88,7 @@ resolution tables. The second performs the argument-principle winding audit.
 - `spectral.py` - retarded spectral continuation.
 - `run_blind_search.py` - blind frequency search.
 - `winding_audit.py` - argument-principle audit.
+- `profile_shape_robustness.py` - microscopic response-profile robustness test.
 - `numerical_method.md` - numerical details and independence statement.
 - `schwarzschild_benchmark.csv` - vacuum benchmark.
 - `all_frequency_seeds.csv` - all attempted seeds, including failures.
@@ -71,7 +96,8 @@ resolution tables. The second performs the argument-principle winding audit.
 - `resolution_convergence.csv` - outer-boundary stability.
 - `bulk_lambda_audit.csv` - full 7x4 SVD residuals.
 - `winding_audit.csv` and `winding_audit_result.txt` - winding-number data.
-- `final_verdict.txt` - compact audit summary.
+- `SPECTRAL_DATA_SHA256.txt` and `verify_spectral_input.py` - byte-level spectral-input audit.
+- `final_verdict.txt` - compact blind-verification summary.
 
 This directory is provided as an additional numerical-method verification. It
 is not presented as an external replication by an independent research group.
