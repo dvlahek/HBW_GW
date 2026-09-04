@@ -78,11 +78,24 @@ M omega = 0.377514811497 - 0.020871653994 i
 
 before unblinding, differing from the primary result by about `3.0e-9`. Its code, search seeds, failed searches, winding audit and bulk checks are in `verification/blind_multiple_shooting/`. Anthropic Claude was used as a coding assistant during implementation of that blind check; the physical specification, blind protocol and validation criteria were defined independently and the outputs were inspected before unblinding.
 
+## External and analytic benchmarks
+
+Three additional checks isolate parts of the calculation from the new matter-led pole:
+
+1. The vacuum Zerilli/ECS implementation gives
+   `M omega = 0.3736716843524924 - 0.0889623156416965 i`, while the independently published Schwarzschild `ell=2` fundamental quoted by Cardoso et al. (Phys. Rev. D 99, 104077, 2019) is `0.3736716844180418 - 0.0889623156889357 i`. The relative complex difference is `2.10e-10`.
+2. The retarded spectral-continuation routine is applied to a finite-support linear density with an exactly known Cauchy transform and second sheet. The maximum absolute error is `2.31e-14`.
+3. Both self-consistent cold families converge to the exact Schwarzschild photon-sphere invariants `B_c^2/M^2 = 27` and `M Omega_c = 1/sqrt(27)` with approximately second-order errors.
+
+The reproduction script and tables are in `verification/external_analytic_benchmarks/`.
+
+The thin-shell calculation of Laeuger et al. (Phys. Rev. D 112, 084042, 2025) is used only as qualitative context: it independently finds weakly damped polar matter modes, but its surface-fluid shell is not quantitatively equivalent to the collisionless extended atmosphere here. Likewise, the linear-stability theorem of Günther, Rein & Straub (Arch. Ration. Mech. Anal. 249, 54, 2025) concerns related small Vlasov shells and is not used as a stability proof for the present finite-q massless families.
+
 ## Source data
 
 `results/source_data/` contains the compact numerical data underlying the four main figures, together with the vacuum-normalized source comparison and real-burst scan.
 
-The publication-resolution `q = 0.10` spectral-node binary is not stored in this minimal Git repository. It is supplied with the manuscript as Supplementary Data 1. The expected checksum for the blind reproduction is recorded in `verification/blind_multiple_shooting/SPECTRAL_DATA_SHA256.txt`.
+The publication-resolution `q = 0.10` spectral-node binary is stored at `verification/blind_multiple_shooting/blind_q010_spectral_nodes.npz`. Its expected size is `1,397,488` bytes and its SHA256 checksum is recorded in `verification/blind_multiple_shooting/SPECTRAL_DATA_SHA256.txt`. The same binary may be submitted to the journal under the filename `Supplementary_Data_1_q010_spectral_nodes.npz`.
 
 ## Repository layout
 
