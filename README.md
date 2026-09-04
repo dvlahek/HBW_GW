@@ -42,6 +42,14 @@ At `q = 0.1` the retarded spectral weights were redistributed smoothly across th
 
 This is a microscopic response-profile robustness test with the equilibrium background held fixed. It is not presented as a second self-consistent stationary Einstein--Vlasov family. The reproducible script is `verification/blind_multiple_shooting/profile_shape_robustness.py`; compact results are in `results/profile_shape_robustness.csv` and `results/profile_shape_robustness_stability.csv`.
 
+## Idealized detector-level separability
+
+A synthetic injection/recovery test asks when the predicted `q = 0.1` matter-led component can be distinguished from a vacuum-only ringdown in Gaussian noise shaped by an analytic Advanced-LIGO design-sensitivity PSD proxy. The predicted mode frequency and damping time are fixed; only amplitudes and phases are fitted.
+
+No zero-kinetic control produced strong two-mode evidence (`DeltaBIC > 10`). At full-window ringdown SNR 40, an injected matter-to-vacuum amplitude ratio of `0.20` reaches at least 90% strong-evidence recovery for every tested mass (`30, 60, 100, 180 Msun`) and start time (`0M, 10M, 20M`). At SNR 30, the corresponding threshold is `0.20` to `0.30`. The tested ratios do not reach the 90% criterion at SNR 12 or 20.
+
+This is a detector-level separability test, not an analysis of measured gravitational-wave data and not an astrophysical detectability forecast. The code is in `verification/detector_injection/`; compact results are in `results/detector_injection_summary.csv` and `results/detector_thresholds.csv`.
+
 ## Repository layout
 
 ```text
@@ -50,7 +58,7 @@ results/       compact numerical audit tables
 verification/  separate numerical verification packages
 ```
 
-The filenames in `code/` retain internal phase labels used during verification so that the modules can be traced to the corresponding successful numerical stages. Exploratory scans and failed development branches are not included in the primary calculation package.
+The filenames in `code/` retain internal phase labels used during verification so that modules can be traced to the corresponding successful numerical stages. Exploratory scans and failed development branches are not included in the primary calculation package.
 
 ## Environment
 
