@@ -1,0 +1,2 @@
+benchmark,literature_source,literature_re,literature_im,our_re,our_im,absolute_complex_difference,relative_complex_difference
+Schwarzschild gravitational ell=2 n=0 QNM,Cardoso_et_al_PRD99_104077_2019,0.3736716844180418,-0.0889623156889357,0.3736716843524924,-0.08896231564169654,8.079770402290096e-11,2.103473448602332e-10
