@@ -2,7 +2,7 @@
 
 Numerical code and compact audit data for our study of polar perturbations of smooth, self-gravitating massless Einstein--Vlasov atmospheres around Schwarzschild black holes.
 
-The repository is intentionally small. It contains publication-facing modules from the verified calculation pipeline, compact result tables, and two separate numerical checks of the global `q = 0.1` mode. Development runs and manuscript files are not included.
+The repository is intentionally small. It contains publication-facing modules from the verified calculation pipeline, compact result tables, and separate numerical checks of the global `q = 0.1` mode. Development runs and manuscript files are not included.
 
 ## Main result
 
@@ -36,12 +36,17 @@ which differs from the primary result by `3.0e-9`. Its winding number is one and
 
 The complete code, all attempted seeds, failed searches, boundary checks, and winding audit are in `verification/blind_multiple_shooting/`. Anthropic Claude was used as a coding assistant during implementation of this blind check. The researchers defined the physical specification, blind protocol, search window, and validation criteria and inspected the code and audit outputs before unblinding.
 
+## Microscopic response-profile robustness
+
+At `q = 0.1` the retarded spectral weights were redistributed smoothly across the publication shells using tilt, central, and two-lobe deformations. The shell weights span approximately `0.68` to `1.39`, while the same simple global pole remains present in all seven cases. The largest relative complex-frequency shift is `6.45e-6`; every case retains unit winding, full Einstein--Vlasov residual control, and stable outer-vacuum matching.
+
+This is a microscopic response-profile robustness test with the equilibrium background held fixed. It is not presented as a second self-consistent stationary Einstein--Vlasov family. The reproducible script is `verification/blind_multiple_shooting/profile_shape_robustness.py`; compact results are in `results/profile_shape_robustness.csv` and `results/profile_shape_robustness_stability.csv`.
+
 ## Repository layout
 
 ```text
 code/          publication-facing calculation modules
 results/       compact numerical audit tables
-data/          notes on publication data
 verification/  separate numerical verification packages
 ```
 
@@ -57,7 +62,7 @@ python -m pip install -r requirements.txt
 
 The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`. The independent Chebyshev reproduction is in `code/independent_pseudospectral_qnm.py`.
 
-The publication-resolution `q = 0.1` spectral-node arrays used for the retarded constitutive response and blind reproduction are distributed as Supplementary Data 1 with the manuscript. They are not committed to this minimal Git repository. An archival data DOI can be added with the published version.
+The publication-resolution `q = 0.1` spectral-node array `blind_q010_spectral_nodes.npz` is required for the blind multiple-shooting and profile-shape checks. It should be placed in `verification/blind_multiple_shooting/`. The expected SHA256 checksum is recorded there so the publication input can be verified byte-for-byte.
 
 ## Scope
 
