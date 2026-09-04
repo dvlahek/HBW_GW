@@ -1,64 +1,98 @@
 # HBW_GW
 
-Numerical code and compact audit data for our study of polar perturbations of smooth, self-gravitating massless Einstein--Vlasov atmospheres around Schwarzschild black holes.
+Publication-facing numerical code and compact source data for the study **“Cold collisionless matter can retain hidden dynamics.”**
 
-The repository is intentionally small. It contains publication-facing modules from the verified calculation pipeline, compact result tables, and separate numerical checks of the global `q = 0.1` mode. Development runs and manuscript files are not included.
+The physical question is broader than one black-hole mode: a collisionless state can become macroscopically cold in an equilibrium moment while retaining a finite derivative-weighted linear response. The black-hole calculation is a self-consistent strong-field realization of that cold-response mechanism in the leading radiative gravitational sector, `ell = 2`.
 
-## Main result
+The repository is intentionally compact. It contains the publication-facing global-response code, source-data tables, independent numerical checks and the audit data needed to inspect the reported claims. Development scans are not included.
 
-For the smooth atmosphere with mass ratio `q = 0.1`, the matter-led polar mode is
+## Main strong-field result
+
+For the smooth Einstein--Vlasov atmosphere with mass ratio
+
+```text
+q = m/M = 0.10
+```
+
+the matter-led polar mode is
 
 ```text
 M omega = 0.377514814460 - 0.020871654486 i
 ```
 
-The mode is also recovered in independently constructed smooth atmospheres at
+The mode is recovered in independently rebuilt smooth atmospheres at
 
 ```text
 q = 0.05, 0.075, 0.10, 0.15, 0.20
 ```
 
-with unit argument-principle winding and stable global boundary-condition audits. The accepted family is listed in `results/q_family_results.csv`.
+with stable global boundary-condition and simple-pole audits. The accepted family is in `results/q_family_results.csv`.
 
-At `q = 0.10` and `q = 0.20`, localized polar sources placed entirely in the outer Schwarzschild vacuum have non-zero overlap with the matter-led pole and finite retarded Green-function residues. Compact results are in `results/source_excitation_summary.csv`, `results/point_source_residues.csv`, and `results/smooth_source_residues.csv`.
+## Second self-consistent profile family
 
-## Separate numerical checks
+The manuscript also changes the stationary phase-space profile itself to
 
-A Chebyshev pseudospectral boundary-value implementation reproduces the `q = 0.1` global pole without using the transfer-matrix, homotopy, or exterior-complex-scaling machinery of the primary solver. The two calculations agree in complex frequency to `1.4e-8`. The solver is in `code/independent_pseudospectral_qnm.py`.
+```text
+F_alt(E,L) = C (E0-E)_+^2 (L-L0)_+^2.
+```
 
-A second blind verification was performed within the **Podatkovna Infrastruktura i Proširena Inteligencija (PiPi)** institutional research project at the Faculty of Organization and Informatics. The target matter-mode frequency, manuscript, and production solver were withheld until the search and numerical audits were complete. The real-axis multiple-shooting calculation recovered
+Its high-resolution continuation path is selected using stationary proper-shell bracketing before any spectral or QNM result is evaluated. The independent family approaches the same radially cold endpoint while retaining finite kinetic susceptibility. Its final global pole is
+
+```text
+M omega_alt = 0.375287456824 - 0.021057162748 i
+```
+
+which is `0.591145%` from the reference `q = 0.10` pole in complex frequency. Compact cold-orbit, seed, stability and QNM audit tables are in `results/second_family_*`; the interpretation and procedure are summarized in `verification/second_family/README.md`.
+
+This is a profile-robustness result, not a universality theorem over arbitrary collisionless distributions.
+
+## Identical exterior forcing
+
+The source-coupling calculation places perturbations entirely in the common outer Schwarzschild region. The ordinary Schwarzschild `ell = 2` fundamental is recomputed in the same Zerilli normalization,
+
+```text
+M omega_vac = 0.373671684352 - 0.088962315642 i.
+```
+
+For the same source, observer and master-function normalization, the matter-led / vacuum Green-function pole-residue ratio is:
+
+```text
+q = 0.10: 0.96--2.50% for six point sources
+          1.17--1.79% for three smooth sources
+
+q = 0.20: 1.60--3.98% for six point sources
+          1.93--2.89% for three smooth sources
+```
+
+A real finite-duration Gaussian-cosine burst scan is also reported. These values compare the two isolated pole contributions; they are not a numerical-relativity merger waveform or a detector forecast. Source data are in `results/source_data/` and the compact post-processing reproduction is in `verification/vacuum_normalized_excitation/`.
+
+## Independent global checks
+
+A Chebyshev pseudospectral boundary-value implementation reproduces the `q = 0.10` global pole without the production transfer-matrix or exterior-complex-scaling construction. The complex-frequency agreement is approximately `1.4e-8`. The solver is `code/independent_pseudospectral_qnm.py`.
+
+A separate blind real-axis multiple-shooting verification within the **Podatkovna Infrastruktura i Proširena Inteligencija (PiPi)** institutional research project recovered
 
 ```text
 M omega = 0.377514811497 - 0.020871653994 i
 ```
 
-which differs from the primary result by `3.0e-9`. Its winding number is one and the full bulk relative singular-value residuals are below `8e-15`.
+before unblinding, differing from the primary result by about `3.0e-9`. Its code, search seeds, failed searches, winding audit and bulk checks are in `verification/blind_multiple_shooting/`. Anthropic Claude was used as a coding assistant during implementation of that blind check; the physical specification, blind protocol and validation criteria were defined independently and the outputs were inspected before unblinding.
 
-The complete code, all attempted seeds, failed searches, boundary checks, and winding audit are in `verification/blind_multiple_shooting/`. Anthropic Claude was used as a coding assistant during implementation of this blind check. The researchers defined the physical specification, blind protocol, search window, and validation criteria and inspected the code and audit outputs before unblinding.
+## Source data
 
-## Microscopic response-profile robustness
+`results/source_data/` contains the compact numerical data underlying the four main figures, together with the vacuum-normalized source comparison and real-burst scan.
 
-At `q = 0.1` the retarded spectral weights were redistributed smoothly across the publication shells using tilt, central, and two-lobe deformations. The shell weights span approximately `0.68` to `1.39`, while the same simple global pole remains present in all seven cases. The largest relative complex-frequency shift is `6.45e-6`; every case retains unit winding, full Einstein--Vlasov residual control, and stable outer-vacuum matching.
-
-This is a microscopic response-profile robustness test with the equilibrium background held fixed. It is not presented as a second self-consistent stationary Einstein--Vlasov family. The reproducible script is `verification/blind_multiple_shooting/profile_shape_robustness.py`; compact results are in `results/profile_shape_robustness.csv` and `results/profile_shape_robustness_stability.csv`.
-
-## Idealized detector-level separability
-
-A synthetic injection/recovery test asks when the predicted `q = 0.1` matter-led component can be distinguished from a vacuum-only ringdown in Gaussian noise shaped by an analytic Advanced-LIGO design-sensitivity PSD proxy. The predicted mode frequency and damping time are fixed; only amplitudes and phases are fitted.
-
-No zero-kinetic control produced strong two-mode evidence (`DeltaBIC > 10`). At full-window ringdown SNR 40, an injected matter-to-vacuum amplitude ratio of `0.20` reaches at least 90% strong-evidence recovery for every tested mass (`30, 60, 100, 180 Msun`) and start time (`0M, 10M, 20M`). At SNR 30, the corresponding threshold is `0.20` to `0.30`. The tested ratios do not reach the 90% criterion at SNR 12 or 20.
-
-This is a detector-level separability test, not an analysis of measured gravitational-wave data and not an astrophysical detectability forecast. The code is in `verification/detector_injection/`; compact results are in `results/detector_injection_summary.csv` and `results/detector_thresholds.csv`.
+The publication-resolution `q = 0.10` spectral-node binary is not stored in this minimal Git repository. It is supplied with the manuscript as Supplementary Data 1. The expected checksum for the blind reproduction is recorded in `verification/blind_multiple_shooting/SPECTRAL_DATA_SHA256.txt`.
 
 ## Repository layout
 
 ```text
 code/          publication-facing calculation modules
-results/       compact numerical audit tables
-verification/  separate numerical verification packages
+results/       compact numerical results and source data
+verification/  independent and post-processing verification packages
 ```
 
-The filenames in `code/` retain internal phase labels used during verification so that modules can be traced to the corresponding successful numerical stages. Exploratory scans and failed development branches are not included in the primary calculation package.
+The filenames in `code/` retain internal phase labels so successful numerical stages remain traceable.
 
 ## Environment
 
@@ -68,10 +102,12 @@ Python 3.11 or newer is recommended.
 python -m pip install -r requirements.txt
 ```
 
-The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The external-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`. The independent Chebyshev reproduction is in `code/independent_pseudospectral_qnm.py`.
+The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The exterior-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`. The independent Chebyshev reproduction is in `code/independent_pseudospectral_qnm.py`.
 
-The publication-resolution `q = 0.1` spectral-node array `blind_q010_spectral_nodes.npz` is required for the blind multiple-shooting and profile-shape checks. It should be placed in `verification/blind_multiple_shooting/`. The expected SHA256 checksum is recorded there so the publication input can be verified byte-for-byte.
+## Additional exploratory detector injection
+
+The repository retains an earlier idealized Gaussian-noise injection/recovery study under `verification/detector_injection/` and `results/detector_*` for transparency. It is **not used to support the current manuscript’s source-response claim** and is not an astrophysical detectability forecast.
 
 ## Scope
 
-The repository reports the publication-grade family through `q = 0.20`. Exploratory calculations outside that verified range are deliberately not included.
+The publication-grade Einstein--Vlasov mass-ratio family reported here is restricted to `q = 0.05--0.20`. Exploratory calculations outside that verified range are deliberately not used in the manuscript.

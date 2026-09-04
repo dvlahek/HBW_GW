@@ -1,0 +1,16 @@
+{
+  "VERDICT": "ALT_PROFILE_GLOBAL_QNM_PASS",
+  "distribution": "C(E0-E)_+^2(L-L0)_+^2",
+  "root_re": 0.37528745682428444,
+  "root_im": -0.021057162747673584,
+  "baseline_root_re": 0.37751481446,
+  "baseline_root_im": -0.020871654486,
+  "shift_re": -0.0022273576357155767,
+  "shift_im": -0.000185508261673583,
+  "relative_complex_shift": 0.005911453648337001,
+  "winding": 1.0,
+  "max_abs_D_across_Rmax": 9.409358787343954e-07,
+  "max_full_7x4_relative_sv": 1.3614874496679567e-12,
+  "n_deduplicated_candidates": 1,
+  "interpretation": "A PASS demonstrates persistence of the matter-led global pole under a second, more strongly smoothed exact Einstein--Vlasov profile family. It is a profile-robustness test, not a universality theorem."
+}
