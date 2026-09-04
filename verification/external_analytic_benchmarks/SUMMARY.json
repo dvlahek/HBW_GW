@@ -1,0 +1,9 @@
+{
+  "published_qnm_relative_difference": 2.103473448602332e-10,
+  "max_retarded_continuation_error": 2.310971295439701e-14,
+  "reference_N80_relative_B2_error": 0.0011481481481481481,
+  "reference_N80_relative_Omega_error": 0.0005487136958378203,
+  "second_N80_relative_B2_error": 0.00048517925925925927,
+  "second_N80_relative_Omega_error": 0.0002471366475679888,
+  "VERDICT": "EXTERNAL_ANALYTIC_BENCHMARKS_PASS"
+}
