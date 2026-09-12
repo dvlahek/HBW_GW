@@ -1,22 +1,27 @@
-# Blind multiple-shooting verification
+# Multiple-shooting numerical verification
 
-This directory contains a separate blind numerical verification of the
+This directory contains a separately implemented numerical reproduction of the
 `q = 0.1` matter-led global mode.
 
 The verification was performed within the **Podatkovna Infrastruktura i
 Proširena Inteligencija (PiPi)** institutional research project at the
-Faculty of Organization and Informatics, University of Zagreb. The individual
-verifier requested not to be named.
+Faculty of Organization and Informatics, University of Zagreb.
 
-The verification received the physical equations, the publication-resolution
-spectral input, and a broad complex-frequency search window. The target
-matter-mode frequency, manuscript, and production solver were withheld until
-the search and numerical audits were complete.
+The calculation uses the physical equations, the publication-resolution
+spectral input and a broad complex-frequency search window. It uses a
+real-axis Riccati multiple-shooting formulation and a separately derived
+Einstein--Vlasov bulk matrix, and it does not use the production transfer-matrix
+or exterior-complex-scaling construction.
 
-Anthropic Claude was used as a coding assistant during implementation. The
-researchers defined the physical specification, blind protocol, search window,
-and validation criteria. The code, failed searches, numerical outputs, and
-audit files were inspected before unblinding.
+Anthropic Claude Sonnet 5 was used as a coding assistant during implementation.
+The researchers defined the physical specification, search window and
+validation criteria and inspected the code, failed searches, numerical outputs
+and audit files.
+
+The historical directory and several file names retain the word `blind` for
+traceability to the original numerical campaign. This verification is not
+presented as a formally blinded protocol or as an external replication by an
+independent research group.
 
 ## Numerical method
 
@@ -27,14 +32,14 @@ re-derived symbolically, and the frequency-dependent retarded constitutive
 response is evaluated from the supplied spectral nodes at each trial
 frequency.
 
-The blind search found one stable simple pole in the prescribed window,
+The search found one stable simple pole in the prescribed window,
 
 ```text
 M omega = 0.377514811497 - 0.020871653994 i
 ```
 
-The value was compared with the production result only after the blind search
-and audits were complete.
+which differs from the production result by approximately `3.0e-9` in complex
+frequency.
 
 ## Reproducing the verification
 
@@ -60,6 +65,7 @@ python winding_audit.py
 
 The first command performs the full seed search and writes the root-search and
 resolution tables. The second performs the argument-principle winding audit.
+The historical script names are retained to preserve traceability.
 
 ## Microscopic response-profile robustness
 
@@ -87,10 +93,10 @@ Compact publication results are also stored in
 - `independent_solver.py` - global multiple-shooting condition.
 - `bulk_blind.py` - separately derived Einstein--Vlasov bulk system.
 - `spectral.py` - retarded spectral continuation.
-- `run_blind_search.py` - blind frequency search.
+- `run_blind_search.py` - frequency-search driver.
 - `winding_audit.py` - argument-principle audit.
 - `profile_shape_robustness.py` - microscopic response-profile robustness test.
-- `numerical_method.md` - numerical details and independence statement.
+- `numerical_method.md` - numerical details and implementation-separation statement.
 - `schwarzschild_benchmark.csv` - vacuum benchmark.
 - `all_frequency_seeds.csv` - all attempted seeds, including failures.
 - `all_converged_roots.csv` - deduplicated roots.
@@ -98,7 +104,6 @@ Compact publication results are also stored in
 - `bulk_lambda_audit.csv` - full 7x4 SVD residuals.
 - `winding_audit.csv` and `winding_audit_result.txt` - winding-number data.
 - `SPECTRAL_DATA_SHA256.txt` and `verify_spectral_input.py` - byte-level spectral-input audit.
-- `final_verdict.txt` - compact blind-verification summary.
+- `final_verdict.txt` - compact verification summary.
 
-This directory is provided as an additional numerical-method verification. It
-is not presented as an external replication by an independent research group.
+This directory is provided as an additional numerical-method verification.
