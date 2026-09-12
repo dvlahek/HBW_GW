@@ -4,7 +4,7 @@ Publication-facing numerical code and compact source data for the study **“Col
 
 The physical question is broader than one black-hole mode: a collisionless state can become macroscopically cold in an equilibrium moment while retaining a finite derivative-weighted linear response. The black-hole calculation is a self-consistent strong-field realization of that cold-response mechanism in the leading radiative gravitational sector, `ell = 2`.
 
-The repository is intentionally compact. It contains the publication-facing global-response code, source-data tables, independent numerical checks and the audit data needed to inspect the reported claims. Development scans are not included.
+The repository is intentionally compact. It contains the publication-facing global-response code, source-data tables, separate numerical checks and the audit data needed to inspect the reported claims. Development scans are not included.
 
 ## Main strong-field result
 
@@ -20,7 +20,7 @@ the matter-led polar mode is
 M omega = 0.377514814460 - 0.020871654486 i
 ```
 
-The mode is recovered in independently rebuilt smooth atmospheres at
+The mode is recovered in separately rebuilt smooth atmospheres at
 
 ```text
 q = 0.05, 0.075, 0.10, 0.15, 0.20
@@ -36,7 +36,7 @@ The manuscript also changes the stationary phase-space profile itself to
 F_alt(E,L) = C (E0-E)_+^2 (L-L0)_+^2.
 ```
 
-Its high-resolution continuation path is selected using stationary proper-shell bracketing before any spectral or QNM result is evaluated. The independent family approaches the same radially cold endpoint while retaining finite kinetic susceptibility. Its final global pole is
+Its high-resolution continuation path is selected using stationary proper-shell bracketing before any spectral or QNM result is evaluated. The separate family approaches the same radially cold endpoint while retaining finite kinetic susceptibility. Its final global pole is
 
 ```text
 M omega_alt = 0.375287456824 - 0.021057162748 i
@@ -66,7 +66,7 @@ q = 0.20: 1.60--3.98% for six point sources
 
 A real finite-duration Gaussian-cosine burst scan is also reported. These values compare the two isolated pole contributions; they are not a numerical-relativity merger waveform or a detector forecast. Source data are in `results/source_data/` and the compact post-processing reproduction is in `verification/vacuum_normalized_excitation/`.
 
-## Independent global checks
+## Separate global checks
 
 A Chebyshev pseudospectral boundary-value implementation reproduces the `q = 0.10` global pole without the production transfer-matrix or exterior-complex-scaling construction. The complex-frequency agreement is approximately `1.4e-8`. The solver is `code/independent_pseudospectral_qnm.py`.
 
@@ -102,7 +102,7 @@ The publication-resolution `q = 0.10` spectral-node binary is stored at `verific
 ```text
 code/          publication-facing calculation modules
 results/       compact numerical results and source data
-verification/  independent and post-processing verification packages
+verification/  separate and post-processing verification packages
 ```
 
 The filenames in `code/` retain internal phase labels so successful numerical stages remain traceable.
@@ -115,7 +115,7 @@ Python 3.11 or newer is recommended.
 python -m pip install -r requirements.txt
 ```
 
-The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The exterior-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`. The independent Chebyshev reproduction is in `code/independent_pseudospectral_qnm.py`.
+The smooth global determinant is implemented in `code/hbh_phase_xxic9_final_global_smooth_qnm_v4.py`. The exterior-source Green-function calculation is in `code/hbh_np_source_excitation_test_v2.py`. The separate Chebyshev reproduction is in `code/independent_pseudospectral_qnm.py`.
 
 ## Additional exploratory detector injection
 
