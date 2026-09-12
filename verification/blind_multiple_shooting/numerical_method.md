@@ -44,7 +44,7 @@ The inner ingoing state is propagated through the matter region and required
 to be parallel to the independently computed outer outgoing state. The
 resulting normalized determinant is the root-search objective.
 
-## Blind search
+## Multiple-shooting search
 
 The search window is
 
@@ -61,16 +61,18 @@ attempts. All attempts, including failures, are stored in
 The single stable candidate is also checked at three outer-vacuum radii and by
 a 24-point argument-principle contour. The winding number is one.
 
-## Independence of the numerical check
+## Separation from the production implementation
 
-The blind calculation was performed within the PiPi institutional research
-project at the Faculty of Organization and Informatics. The target matter-mode
-frequency, manuscript, and production solver were withheld until the search
-and audits were complete. The vacuum formulation differs from both the
-production exterior-complex-scaling calculation and the Chebyshev
-boundary-value cross-check.
+The multiple-shooting calculation was implemented separately within the PiPi
+institutional research project at the Faculty of Organization and Informatics.
+Its vacuum formulation differs from both the production exterior-complex-scaling
+calculation and the Chebyshev boundary-value cross-check, and the Einstein--Vlasov
+bulk matrix is separately derived symbolically.
 
-Anthropic Claude was used as a coding assistant during implementation. The
-researchers defined the physical specification, blind protocol, search window,
-and validation criteria and inspected the resulting code and numerical audits
-before unblinding.
+Anthropic Claude Sonnet 5 was used as a coding assistant during implementation.
+The researchers defined the physical specification, search window and
+validation criteria and inspected the resulting code and numerical audits.
+
+The historical directory and several file names retain the word `blind` for
+traceability. This calculation is not presented as a formally blinded protocol
+or as an external replication by an independent research group.
