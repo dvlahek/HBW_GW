@@ -70,13 +70,13 @@ A real finite-duration Gaussian-cosine burst scan is also reported. These values
 
 A Chebyshev pseudospectral boundary-value implementation reproduces the `q = 0.10` global pole without the production transfer-matrix or exterior-complex-scaling construction. The complex-frequency agreement is approximately `1.4e-8`. The solver is `code/independent_pseudospectral_qnm.py`.
 
-A separate blind real-axis multiple-shooting verification within the **Podatkovna Infrastruktura i Proširena Inteligencija (PiPi)** institutional research project recovered
+A separately implemented real-axis Riccati multiple-shooting calculation within the **Podatkovna Infrastruktura i Proširena Inteligencija (PiPi)** institutional research project provides an additional numerical reproduction of the same global mode,
 
 ```text
 M omega = 0.377514811497 - 0.020871653994 i
 ```
 
-before unblinding, differing from the primary result by about `3.0e-9`. Its code, search seeds, failed searches, winding audit and bulk checks are in `verification/blind_multiple_shooting/`. Anthropic Claude was used as a coding assistant during implementation of that blind check; the physical specification, blind protocol and validation criteria were defined independently and the outputs were inspected before unblinding.
+differing from the primary result by about `3.0e-9`. It uses a separately derived Einstein--Vlasov bulk matrix and does not use the production transfer-matrix or exterior-complex-scaling construction. Its code, search seeds, failed searches, winding audit and bulk checks are retained in `verification/blind_multiple_shooting/`. Anthropic Claude Sonnet 5 was used as a coding assistant during implementation; the physical specification, search window and validation criteria were defined by the researchers and the outputs were inspected. The historical directory name is retained for traceability; this calculation is not presented as a formally blinded protocol or as an external replication by an independent research group.
 
 ## External and analytic benchmarks
 
@@ -95,7 +95,7 @@ The thin-shell calculation of Laeuger et al. (Phys. Rev. D 112, 084042, 2025) is
 
 `results/source_data/` contains the compact numerical data underlying the four main figures, together with the vacuum-normalized source comparison and real-burst scan.
 
-The publication-resolution `q = 0.10` spectral-node binary is stored at `verification/blind_multiple_shooting/blind_q010_spectral_nodes.npz`. Its expected size is `1,397,488` bytes and its SHA256 checksum is recorded in `verification/blind_multiple_shooting/SPECTRAL_DATA_SHA256.txt`. The same binary may be submitted to the journal under the filename `Supplementary_Data_1_q010_spectral_nodes.npz`.
+The publication-resolution `q = 0.10` spectral-node binary is stored at `verification/blind_multiple_shooting/blind_q010_spectral_nodes.npz`. Its expected size is `1,397,488` bytes and its SHA256 checksum is recorded in `verification/blind_multiple_shooting/SPECTRAL_DATA_SHA256.txt`. The historical path is retained for traceability. The same binary may be submitted to the journal under the filename `Supplementary_Data_1_q010_spectral_nodes.npz`.
 
 ## Repository layout
 
