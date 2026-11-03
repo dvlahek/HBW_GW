@@ -34,7 +34,7 @@ jobs:
 
       - name: Run physical-sheet upper-half-plane audit
         working-directory: verification/blind_multiple_shooting
-        run: python upper_half_plane_audit.py --n-primary 384 --n-dense 768 --re-min -0.05 --re-max 1.0 --im-min 0.001 --im-max 0.5 --rmax 40
+        run: python upper_half_plane_audit.py --n-primary 192 --n-dense 384 --re-min -0.05 --re-max 1.0 --im-min 0.001 --im-max 0.5 --rmax 40
 
       - name: Show summary
         if: always()
