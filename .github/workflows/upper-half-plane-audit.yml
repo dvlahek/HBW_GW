@@ -1,0 +1,48 @@
+name: CQG upper-half-plane audit
+
+on:
+  push:
+    branches:
+      - revision/upper-half-plane-audit-20261103
+    paths:
+      - 'verification/blind_multiple_shooting/**'
+      - '.github/workflows/upper-half-plane-audit.yml'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Verify publication spectral input
+        working-directory: verification/blind_multiple_shooting
+        run: python verify_spectral_input.py
+
+      - name: Run physical-sheet upper-half-plane audit
+        working-directory: verification/blind_multiple_shooting
+        run: python upper_half_plane_audit.py --n-primary 384 --n-dense 768 --re-min -0.05 --re-max 1.0 --im-min 0.001 --im-max 0.5 --rmax 40
+
+      - name: Show summary
+        if: always()
+        working-directory: verification/blind_multiple_shooting
+        run: cat upper_half_plane_audit_output/upper_half_plane_audit_summary.txt || true
+
+      - name: Upload audit outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cqg-upper-half-plane-audit
+          path: verification/blind_multiple_shooting/upper_half_plane_audit_output/
+          if-no-files-found: warn
