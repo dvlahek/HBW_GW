@@ -32,9 +32,11 @@ jobs:
         working-directory: verification/blind_multiple_shooting
         run: python verify_spectral_input.py
 
-      - name: Run physical-sheet missing-strip audit
+      - name: Run physical-sheet full-window audit from physical bulk basin
         working-directory: verification/blind_multiple_shooting
-        run: python upper_half_plane_audit.py --n-primary 64 --n-dense 128 --re-min -0.05 --re-max 0.05 --im-min 0.001 --im-max 0.5 --rmax 40
+        run: |
+          sed -i 's/ANCHOR_RE = 0.377514814460/ANCHOR_RE = 0.4/' upper_half_plane_audit.py
+          python upper_half_plane_audit.py --n-primary 384 --n-dense 768 --re-min -0.05 --re-max 1.0 --im-min 0.001 --im-max 0.5 --rmax 40
 
       - name: Show summary
         if: always()
@@ -45,6 +47,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cqg-upper-half-plane-missing-strip-audit
+          name: cqg-upper-half-plane-audit-closed-sector
           path: verification/blind_multiple_shooting/upper_half_plane_audit_output/
           if-no-files-found: warn
