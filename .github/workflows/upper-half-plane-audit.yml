@@ -3,6 +3,7 @@ name: CQG upper-half-plane audit
 on:
   push:
     branches:
+      - main
       - revision/upper-half-plane-audit-20261103
     paths:
       - 'verification/blind_multiple_shooting/**'
