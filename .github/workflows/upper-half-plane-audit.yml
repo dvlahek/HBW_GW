@@ -1,11 +1,9 @@
 name: CQG upper-half-plane audit
 
-# Verification-only workflow for the CQG-117441 revision audit.
 on:
   push:
     branches:
       - main
-      - revision/upper-half-plane-audit-20261103
     paths:
       - 'verification/blind_multiple_shooting/**'
       - '.github/workflows/upper-half-plane-audit.yml'
@@ -32,34 +30,9 @@ jobs:
         working-directory: verification/blind_multiple_shooting
         run: python verify_spectral_input.py
 
-      - name: Run physical-sheet full-window audit with stable contour orientation
+      - name: Run strict physical-sheet full-window audit
         working-directory: verification/blind_multiple_shooting
-        run: |
-          python - <<'PY'
-          import sys
-          import upper_half_plane_audit as u
-
-          u.ANCHOR_RE = 0.4
-          u.FALLBACKS = u.FALLBACKS + ((0.0 + 0.0j, -0.22 + 0.0j),)
-
-          ccw_contour = u.contour
-          def clockwise_contour(*args, **kwargs):
-              pts = ccw_contour(*args, **kwargs)
-              return [pts[0]] + list(reversed(pts[1:-1])) + [pts[0]]
-          u.contour = clockwise_contour
-
-          sys.argv = [
-              'upper_half_plane_audit.py',
-              '--n-primary', '384',
-              '--n-dense', '768',
-              '--re-min', '-0.05',
-              '--re-max', '1.0',
-              '--im-min', '0.001',
-              '--im-max', '0.5',
-              '--rmax', '40',
-          ]
-          u.main()
-          PY
+        run: python upper_half_plane_audit.py --n-primary 384 --n-dense 768 --re-min -0.05 --re-max 1.0 --im-min 0.001 --im-max 0.5 --rmax 40
 
       - name: Show summary
         if: always()
@@ -70,6 +43,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cqg-upper-half-plane-audit-final-cw
+          name: cqg-upper-half-plane-audit-strict
           path: verification/blind_multiple_shooting/upper_half_plane_audit_output/
           if-no-files-found: warn
