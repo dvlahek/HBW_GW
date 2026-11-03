@@ -1,5 +1,6 @@
 name: CQG upper-half-plane audit
 
+# Verification-only workflow for the CQG-117441 revision audit.
 on:
   push:
     branches:
