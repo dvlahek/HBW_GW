@@ -1,0 +1,53 @@
+{
+  "audit": "physical-sheet upper-half-plane growing-mode audit",
+  "interpretation_scope": "finite-window linear spectral audit only",
+  "bulk_residual_gate": 1e-07,
+  "contours": [
+    {
+      "label": "primary",
+      "physical_sheet": true,
+      "bounds": {"re_min": -0.05, "re_max": 1.0, "im_min": 0.001, "im_max": 0.5},
+      "requested_contour_points": 384,
+      "evaluated_points_including_closure": 385,
+      "rmax": 40.0,
+      "winding": -1.4800181117743565e-13,
+      "winding_integer": 0,
+      "winding_unwrapped": -1.4807249017035706e-13,
+      "min_abs_D": 0.15308806196961108,
+      "min_abs_D_at": {"re": 0.3780769230769231, "im": 0.001},
+      "max_abs_phase_step_rad": 1.285323825603487,
+      "phase_step_below_pi": true,
+      "closure_relative_D_mismatch": 9.367210504239653e-13,
+      "max_full_bulk_relative_sv": 8.289017592932766e-08,
+      "min_bulk_root_separation": 0.08585783795557476,
+      "adaptive_substeps_total": 4,
+      "csv": "upper_half_plane_primary.csv"
+    },
+    {
+      "label": "dense",
+      "physical_sheet": true,
+      "bounds": {"re_min": -0.05, "re_max": 1.0, "im_min": 0.001, "im_max": 0.5},
+      "requested_contour_points": 768,
+      "evaluated_points_including_closure": 769,
+      "rmax": 40.0,
+      "winding": 2.9402461055307175e-14,
+      "winding_integer": 0,
+      "winding_unwrapped": 2.904906609070012e-14,
+      "min_abs_D": 0.14929644595834404,
+      "min_abs_D_at": {"re": 0.37403846153846154, "im": 0.001},
+      "max_abs_phase_step_rad": 0.7167041146214964,
+      "phase_step_below_pi": true,
+      "closure_relative_D_mismatch": 1.826973718549729e-13,
+      "max_full_bulk_relative_sv": 9.997976207735846e-08,
+      "min_bulk_root_separation": 0.04310602439382033,
+      "adaptive_substeps_total": 3,
+      "csv": "upper_half_plane_dense.csv"
+    }
+  ],
+  "integer_windings_agree": true,
+  "both_windings_zero": true,
+  "phase_continuity_gate": true,
+  "bulk_residual_gate_pass": true,
+  "closure_gate_pass": true,
+  "verdict": "PASS_NO_GROWING_ROOTS_IN_TESTED_REGION"
+}
