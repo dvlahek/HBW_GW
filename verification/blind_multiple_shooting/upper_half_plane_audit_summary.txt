@@ -1,0 +1,26 @@
+PHYSICAL-SHEET UPPER-HALF-PLANE AUDIT
+======================================
+Region: -0.05 <= Re(Mw) <= 1.0, 0.001 <= Im(Mw) <= 0.5
+Bulk residual acceptance gate: 1.0e-07
+
+primary:
+  points: 384
+  winding: -0.000000000000 (integer 0)
+  min |D|: 1.530880619696e-01 at +0.378076923+0.001000000i
+  max |phase step|: 1.285324 rad
+  closure relative D mismatch: 9.367e-13
+  max full-bulk relative SV: 8.289e-08
+  min bulk-root separation: 8.585784e-02
+  adaptive substeps: 4
+
+dense:
+  points: 768
+  winding: 0.000000000000 (integer 0)
+  min |D|: 1.492964459583e-01 at +0.374038462+0.001000000i
+  max |phase step|: 0.716704 rad
+  closure relative D mismatch: 1.827e-13
+  max full-bulk relative SV: 9.998e-08
+  min bulk-root separation: 4.310602e-02
+  adaptive substeps: 3
+
+VERDICT: PASS_NO_GROWING_ROOTS_IN_TESTED_REGION
