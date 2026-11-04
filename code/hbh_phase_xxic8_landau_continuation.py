@@ -137,3 +137,24 @@ def transform_radial(z, radial, which, *, second_sheet):
         br = item[which]
         total += continued_branch(z, br) if second_sheet else direct_branch(z, br)
     return total
+
+
+def evaluate_chi(z, radial, carrier, *, second_sheet):
+    """Constitutive response in the same normalization as the smooth C9 solver.
+
+    Used by the separate pseudospectral global boundary-value formulation.
+    The finite-support carrier and radial branches use the same retarded
+    continuation on the lower-half-plane sheet.
+    """
+    z = complex(z)
+    ph = sum(
+        continued_branch(z, item["HH"]) if second_sheet else direct_branch(z, item["HH"])
+        for item in carrier
+    )
+    pjj = transform_radial(z, radial, "JJ", second_sheet=second_sheet)
+    pjx = transform_radial(z, radial, "JX", second_sheet=second_sheet)
+    omega0 = 1.0 / math.sqrt(27.0)
+    ds_plus = (9.0 * omega0 / 8.0) / (2.0 * omega0 - z)
+    kappa = 0.5 * ds_plus / ph
+    return {"PH": ph, "PJJ": pjj, "PJX": pjx, "kappa": kappa,
+            "chiJ": kappa * pjj, "chiX": kappa * pjx}

@@ -19,6 +19,7 @@ from scipy.integrate import solve_ivp
 
 import hbh_phase_xxic8_landau_continuation as c8
 import hbh_phase_xxic9_final_global_smooth_qnm_v4 as c9
+from publication_inputs import load_publication_case as load_case_inputs
 
 Q_CASES = [0.10, 0.20]
 POINT_SOURCE_RADII = [3.5, 4.0, 5.0, 6.0, 8.0, 10.0]
@@ -34,35 +35,12 @@ SMOOTH_SOURCES = [
 
 
 def load_publication_case(family_zip, q):
-    p = Path(family_zip)
-    with zipfile.ZipFile(p, "r") as zf:
-        names = zf.namelist()
-        result_names = [n for n in names if n.endswith("consistent_q_family_results.csv")]
-        if len(result_names) != 1:
-            raise RuntimeError("Could not locate consistent_q_family_results.csv.")
-
-        df = pd.read_csv(zf.open(result_names[0]))
-        row = df[np.isclose(df.q, q)]
-        if len(row) != 1:
-            raise RuntimeError(f"Need one accepted family row at q={q}.")
-        row = row.iloc[0]
-
-        N = int(row.N)
-        qtag = f"{q:.3f}".replace(".", "p")
-        suffix = f"q_{qtag}_N{N}.npz"
-        matches = [n for n in names if n.endswith(suffix)]
-        if len(matches) != 1:
-            raise RuntimeError(f"Could not locate spectral cache {suffix}.")
-
-        raw = io.BytesIO(zf.read(matches[0]))
-        with np.load(raw, allow_pickle=False) as npz:
-            spc = {k: np.array(npz[k]) for k in npz.files}
-
-    radial, carrier = c8.build_catalog(spc)
-    w = complex(float(row.root_re), float(row.root_im))
+    """Return the published root and kinetic nodes for a selected mass ratio."""
+    radial, carrier, row = load_case_inputs(q, family_zip=family_zip)
+    w = complex(float(row["root_re"]), float(row["root_im"]))
     lams = [
-        complex(float(row.lambda1_re), float(row.lambda1_im)),
-        complex(float(row.lambda2_re), float(row.lambda2_im)),
+        complex(float(row["lambda1_re"]), float(row["lambda1_im"])),
+        complex(float(row["lambda2_re"]), float(row["lambda2_im"])),
     ]
     return radial, carrier, w, lams
 
@@ -217,7 +195,8 @@ def run_case(q, radial, carrier, w, lams, *, xivc, Mfun, row_names):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--family", default="phase_prx_final_q_family_output.zip")
+    ap.add_argument("--family", default=None, help="Optional legacy full-family ZIP; without it only the public q=0.10 NPZ is available")
+    ap.add_argument("--q", type=float, nargs="+", choices=Q_CASES, default=[0.10], help="Mass ratios to recompute; q=0.20 needs --family with its spectral nodes")
     ap.add_argument("--outdir", default="source_excitation_output")
     args = ap.parse_args()
 
@@ -234,7 +213,7 @@ def main():
     point=[]
     smooth=[]
 
-    for q in Q_CASES:
+    for q in args.q:
         radial,carrier,w,lams = load_publication_case(args.family,q)
         s,p,g = run_case(q,radial,carrier,w,lams,xivc=xivc,Mfun=Mfun,row_names=row_names)
         summaries.append(s); point.extend(p); smooth.extend(g)

@@ -13,6 +13,7 @@ import sympy as sp
 from scipy.optimize import least_squares
 import hbh_phase_ix_bulk_EV as phase_ix
 import hbh_phase_xxic8_landau_continuation as landau
+from publication_inputs import load_publication_case
 Q = 0.1
 L_OCEAN = 9.0 * math.log(1.0 / Q)
 REFERENCE_W = 0.37751481446 - 0.020871654486j
@@ -30,22 +31,10 @@ def zip_folder(out):
     return zp
 
 def load_publication_spectral_cache(path):
-    p = Path(path)
-    with zipfile.ZipFile(p, 'r') as zf:
-        result_names = [n for n in zf.namelist() if n.endswith('consistent_q_family_results.csv')]
-        cache_names = [n for n in zf.namelist() if n.endswith('spectral_cache/q_0p100_N80.npz')]
-        if len(result_names) != 1 or len(cache_names) != 1:
-            raise RuntimeError('Could not locate the q=0.1 publication result/cache.')
-        results = pd.read_csv(zf.open(result_names[0]))
-        row = results[np.isclose(results.q, Q)]
-        if len(row) != 1:
-            raise RuntimeError('Expected one publication q=0.1 row.')
-        stored = row.iloc[0].to_dict()
-        raw = io.BytesIO(zf.read(cache_names[0]))
-        with np.load(raw, allow_pickle=False) as npz:
-            spc = {k: np.array(npz[k]) for k in npz.files}
-    radial, carrier = landau.build_catalog(spc)
-    return (radial, carrier, stored)
+    """Use the deposited public q=0.10 nodes unless a legacy ZIP is supplied."""
+    radial, carrier, stored = load_publication_case(Q, family_zip=path)
+    return radial, carrier, stored
+
 
 def row_normalized(A):
     A = np.asarray(A, dtype=np.complex128).copy()
@@ -296,7 +285,7 @@ def solve_root(matcher, seed):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--family', default='phase_prx_final_q_family_output.zip')
+    ap.add_argument('--family', default=None, help='Optional legacy full-family ZIP; default is the public, SHA256-verified q=0.10 NPZ')
     ap.add_argument('--outdir', default='phase_independent_pseudospectral_qnm_output')
     ap.add_argument('--quick', action='store_true')
     args = ap.parse_args()
@@ -307,7 +296,7 @@ def main():
     radial, carrier, stored = load_publication_spectral_cache(args.family)
     stored_w = complex(float(stored['root_re']), float(stored['root_im']))
     if abs(stored_w - REFERENCE_W) > 5e-06:
-        raise RuntimeError(f'The supplied family ZIP does not contain the publication-resolution q=0.1 root. Its stored root is {stored_w}. Use the FULL phase_prx_final_q_family_output.zip.')
+        raise RuntimeError(f'The supplied family ZIP does not contain the publication-resolution q=0.1 root. Its stored root is {stored_w}. Check the publication q-family table or the supplied legacy archive.')
     Mfun, row_names = build_bulk_matrix()
     resolutions = [32, 48, 64] if args.quick else [48, 64, 80]
     rows = []

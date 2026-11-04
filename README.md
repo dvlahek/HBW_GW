@@ -91,6 +91,75 @@ The reproduction script and tables are in `verification/external_analytic_benchm
 
 The thin-shell calculation of Laeuger et al. (Phys. Rev. D 112, 084042, 2025) is used only as qualitative context: it independently finds weakly damped polar matter modes, but its surface-fluid shell is not quantitatively equivalent to the collisionless extended atmosphere here. Likewise, the linear-stability theorem of Günther, Rein & Straub (Arch. Ration. Mech. Anal. 249, 54, 2025) concerns related small Vlasov shells and is not used as a stability proof for the present finite-q massless families.
 
+## Reproduction from the public checkout (CQG revision)
+
+Install dependencies from the repository root:
+
+```bash
+python -m pip install -r requirements.txt
+python verification/blind_multiple_shooting/verify_spectral_input.py
+python verification/publication_readiness.py
+python verification/external_analytic_benchmarks/reproduce_external_analytic_benchmarks.py
+python verification/vacuum_normalized_excitation/reproduce_compact_comparison.py
+```
+
+The last two commands reproduce the published **analytic/external checks and the
+two-mass-ratio compact residue/burst comparisons**. They use archived compact
+tables; they are not a fresh self-consistent Einstein--Vlasov construction.
+
+The openly deposited, SHA256-verified
+`verification/blind_multiple_shooting/blind_q010_spectral_nodes.npz`
+contains the publication-resolution **q=0.10** spectral response. The separate
+Chebyshev solver and the exterior source-coupling solver have been adapted to
+read it directly; the old development ZIP is not required for these **q=0.10**
+calculations:
+
+```bash
+python code/independent_pseudospectral_qnm.py
+python code/hbh_np_source_excitation_test_v2.py --q 0.10
+```
+
+These are **full numerical calculations**, not fast smoke tests. The
+pseudospectral solver uses the published q=0.10 constitutive input and solves
+a separate global boundary-value problem. The source calculation solves the
+q=0.10 outer Green-function coupling. Both require the dependencies above.
+The compact results of their previously completed runs are committed under
+`results/`.
+
+**Scope limitation:** The full spectral cache for **q=0.20** and the complete
+original mass-ratio family archive are **not** deposited in this compact
+repository. Their published numerical tables and source ratios are available
+for inspection and compact post-processing, but a new full q=0.20 source
+calculation requires the original full-family archive. If it is supplied
+separately, the original input format remains supported:
+
+```bash
+python code/hbh_np_source_excitation_test_v2.py --q 0.10 0.20 --family /path/to/phase_prx_final_q_family_output.zip
+python code/independent_pseudospectral_qnm.py --family /path/to/phase_prx_final_q_family_output.zip
+```
+
+The scripts fail with an explicit error rather than silently constructing a
+surrogate spectral cache. No full q=0.20 reproduction is claimed using only
+the compact public checkout.
+
+### Main-text figure-file mapping
+
+Some filenames preserve their historical development-stage figure numbers;
+**the final manuscript figure numbering is authoritative**:
+
+| Final main-text figure | Public CSV source |
+| --- | --- |
+| Figure 1: cold kinetic response | `results/source_data/Fig1_cold_limit_memory.csv` |
+| Figure 2: sharp-to-smooth continuation | `results/source_data/Fig3_sharp_to_smooth_selected_checkpoints.csv` |
+| Figure 3: q-dependent matter-led poles | `results/source_data/Fig2_qnm_family.csv` |
+| Figure 4: exterior source residues | `results/source_data/Fig4_point_excitation_ratios.csv` and `Fig4_smooth_excitation_ratios.csv` |
+
+GitHub Actions runs the publication-integrity and compact benchmark checks
+in `.github/workflows/publication-readiness.yml`. The expensive complete
+pseudospectral and external-source solves are **not** run on each CI commit;
+their source code, archived outputs, and a separate q=0.10 multiple-shooting
+verification are provided for inspection.
+
 ## Source data
 
 `results/source_data/` contains the compact numerical data underlying the four main figures, together with the vacuum-normalized source comparison and real-burst scan.

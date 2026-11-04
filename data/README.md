@@ -9,3 +9,11 @@ The publication-resolution `q = 0.10` spectral-node array used by the retarded c
 Its expected size is `1,397,488` bytes and its SHA256 checksum is recorded in `verification/blind_multiple_shooting/SPECTRAL_DATA_SHA256.txt`. The same binary may be supplied to the journal under the submission filename `Supplementary_Data_1_q010_spectral_nodes.npz`.
 
 Compact numerical values needed to inspect the reported roots, convergence tests, source residues, external/analytic benchmarks and figure data are available under `../results/` and `../verification/`.
+
+The deposited NPZ covers only `q=0.10`. Full q=0.20 spectral-node arrays
+are not included; their reported compact outputs remain in `results/`.
+`code/publication_inputs.py` validates the public q=0.10 NPZ and serves
+it to the separate pseudospectral and source-coupling scripts. It can read
+the legacy full-family archive when supplied explicitly with `--family`.
+The README at the repository root maps the final manuscript figures to
+the historical source-data filenames.
