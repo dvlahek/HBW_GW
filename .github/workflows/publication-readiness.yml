@@ -1,0 +1,49 @@
+name: CQG publication reproducibility smoke tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'code/**'
+      - 'verification/**'
+      - 'results/**'
+      - '.github/workflows/publication-readiness.yml'
+      - 'requirements.txt'
+  pull_request:
+    paths:
+      - 'code/**'
+      - 'verification/**'
+      - 'results/**'
+      - '.github/workflows/publication-readiness.yml'
+      - 'requirements.txt'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compile publication code
+        run: python -m compileall -q code verification
+      - name: Verify deposited publication spectral nodes
+        run: python verification/blind_multiple_shooting/verify_spectral_input.py
+      - name: Verify publication inputs and constitutive response
+        run: python verification/publication_readiness.py
+      - name: Check QNM and source script interfaces
+        run: |
+          python code/independent_pseudospectral_qnm.py --help
+          python code/hbh_np_source_excitation_test_v2.py --help
+      - name: Reproduce external and analytic benchmarks
+        run: python verification/external_analytic_benchmarks/reproduce_external_analytic_benchmarks.py
+      - name: Reproduce two-mass-ratio compact source comparison
+        run: python verification/vacuum_normalized_excitation/reproduce_compact_comparison.py
