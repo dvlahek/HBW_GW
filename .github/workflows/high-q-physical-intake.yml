@@ -214,6 +214,11 @@ jobs:
         run: |
           python verification/q_high_continuation/c1_metric_vs_c9_length_stress.py \
             --output results/q_high_geometry_length_stress.json
+      - name: Source-matched vacuum 220 benchmark after exact C1 geometry-length correction
+        run: |
+          python verification/q_high_continuation/c1_c9_length_stressed_source_benchmark.py \
+            --geometry-json results/q_high_geometry_length_stress.json \
+            --out results/q_high_geometry_source
       - name: Enforce nonphysical surrogate interpretation
         if: always()
         run: |
@@ -227,12 +232,22 @@ jobs:
           assert x["causal_kinetic_sheet_uniquely_selected"] is False
           assert x["radiative_strain_or_merger_excitation_computed"] is False
           assert len(x["results"])==6
-          print("C1_GEOMETRY_C9_SURROGATE_SCOPE_GATE_PASS")
+          res=Path("results/q_high_geometry_source/effective_C9_length_stressed_benchmark.json")
+          assert res.exists()
+          e=json.loads(res.read_text())
+          assert e["physical_metric_green_residue_confirmed"] is False
+          assert e["physical_kinetic_sheet_uniquely_selected"] is False
+          assert e["radiative_strain_at_infinity_computed"] is False
+          assert e["merger_excitation_or_SNR_calculated"] is False
+          assert len(e["results"])==6
+          print("C1_GEOMETRY_C9_SURROGATE_AND_SOURCE_BENCHMARK_SCOPE_PASS")
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: exact-C1-vs-C9-length-sensitivity
-          path: results/q_high_geometry_length_stress.json
+          path: |
+            results/q_high_geometry_length_stress.json
+            results/q_high_geometry_source/
           retention-days: 90
           if-no-files-found: warn
