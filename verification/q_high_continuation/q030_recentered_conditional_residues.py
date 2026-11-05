@@ -16,7 +16,7 @@ ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/"code"))
 import hbh_phase_xxic9_final_global_smooth_qnm_v4 as c9
 import hbh_np_source_excitation_test_v2 as source
-from q030_taylor_q030_recentered_center import cases,evaluate
+from q030_taylor_q025_center import cases,evaluate
 from q030_recentered_global_bounded import OLD_Q020_LAMBDA_PAIR,SOURCES
 
 TOL_DERIV=.025
