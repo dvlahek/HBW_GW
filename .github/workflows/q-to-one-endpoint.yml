@@ -41,6 +41,8 @@ jobs:
           assert j["q1_transfer"]["T_equals_identity_exactly"] is True
           assert j["q1_transfer"]["thickness_M"]==0
           assert j["q1_matter_pole_disk"]["winding_number"]==0
+          assert j["q1_matter_pole_disk_independent_resolution_check"]["winding_number"]==0
+          assert j["q1_matter_pole_disk_independent_resolution_check"]["N"]==64
           assert len(j["published_q_family"])==5
           assert len(j["unresolved_mass_ratios"])==7
           assert all(x["pole_status"]=="NOT COMPUTED" for x in j["unresolved_mass_ratios"])
