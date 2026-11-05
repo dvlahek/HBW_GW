@@ -17,7 +17,7 @@ import numpy as np
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/"code"))
 import hbh_phase_xxic9_final_global_smooth_qnm_v4 as c9
-from q030_taylor_q030_recentered_center import cases,evaluate
+from q030_taylor_q025_center import cases,evaluate
 from q030_recentered_global_bounded import (
     SEED_Q025_ROOT,OLD_Q020_LAMBDA_PAIR,SOURCES
 )
@@ -34,7 +34,7 @@ def run(path):
          "numerical_winding_is_not_pole_free_analytic_proof":True,
          "root_search_not_replaced_by_contour":True,
          "physical_retarded_sheet_uniqueness_proven":False,
-         "original_q020_seed":[SEED_Q025_ROOT.real,SEED_Q025_ROOT.imag],
+         "q025_predecessor_seed":[SEED_Q025_ROOT.real,SEED_Q025_ROOT.imag],
          "results":{}}
     for name in SOURCES:
         case=data[name]
