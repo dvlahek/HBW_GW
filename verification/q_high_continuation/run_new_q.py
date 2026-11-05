@@ -38,7 +38,7 @@ import hbh_phase_xxic8_landau_continuation as landau
 import hbh_phase_xxic9_final_global_smooth_qnm_v4 as c9
 from publication_inputs import Q010_SHA256,Q_FAMILY_TABLE,SPECTRAL_KEYS,load_publication_case
 
-ALLOWED_SOURCE_Q=(.3,.4,.5,.6,.7,.8,.9,.95,.97,.99,.995,.999)
+ALLOWED_SOURCE_Q=(.25,.3,.4,.5,.6,.7,.8,.9,.95,.97,.99,.995,.999)
 MAX_NPZ_BYTES=256*1024*1024
 MAX_MASS_ERROR=1e-5
 MAX_CONSTRAINT_NORM=1e-5
