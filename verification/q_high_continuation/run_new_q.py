@@ -262,7 +262,7 @@ def run_solver(case,previous_result,outdir):
                 "physical_input_SHA256":case["spectral_SHA256"],
                 "diagnostics":spectral_gate,
                 "required_fix":"Validated globally analytic retarded kinetic continuation, with q>.2 quadrature and dW/domega convergence"
-            },indent=2)+"\\n")
+            },indent=2)+"\n")
         raise RuntimeError("Physical q data valid but retarded C8 is nonanalytic across spectral knots: global mode/residue claim BLOCKED")
     xivc=c9.load_xivc()
     phase_ix=xivc.load_phase_ix()
