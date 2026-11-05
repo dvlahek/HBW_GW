@@ -151,7 +151,12 @@ def run(output,n=CONTOUR_N,Rmax=RMAX):
     measured_material=vacuum_D(M_POLE,Rmax)
     measured_vac=vacuum_D(VAC_POLE,Rmax)
     matter_contour=count_contour(M_POLE,n=n,Rmax=Rmax)
-    if matter_contour["winding_number"]!=0:
+    # Independent circular-resolution / exterior ECS-radius check:
+    # sample twice as densely and move the outgoing boundary out by 25%.
+    # This is a numerical sensitivity check, NOT an interval proof.
+    second_contour=count_contour(M_POLE,n=2*n,Rmax=1.25*Rmax)
+    if (matter_contour["winding_number"]!=0 or
+        second_contour["winding_number"]!=0):
         raise RuntimeError("Unexpected q=1 vacuum pole in q=.1 matter disk")
     if abs(measured_vac)>=abs(measured_material):
         raise RuntimeError("Vacuum known QNM determinant is not smaller at benchmark")
@@ -172,6 +177,7 @@ def run(output,n=CONTOUR_N,Rmax=RMAX):
         "q1_normalized_vacuum_det_at_matter_pole":[measured_material.real,measured_material.imag],
         "q1_normalized_vacuum_det_at_vacuum_grav220":[measured_vac.real,measured_vac.imag],
         "q1_matter_pole_disk":matter_contour,
+        "q1_matter_pole_disk_independent_resolution_check":second_contour,
         "q1_exact_matter_branch_residue_at_fixed_old_pole":"NO distinct pole in tested q=1 vacuum disk",
         "published_q_family":table,
         "published_exterior_source_residue_ratios":source_ratios,
@@ -212,6 +218,7 @@ def run(output,n=CONTOUR_N,Rmax=RMAX):
         "q1_vacuum_det_at_matter":abs(measured_material),
         "q1_vacuum_det_at_grav220":abs(measured_vac),
         "matter_disk_winding":matter_contour["winding_number"],
+        "matter_disk_winding_2N_1p25R":second_contour["winding_number"],
         "q_poles_measured":len(table),
         "q_poles_near_one_new":0,
         "point_q01_range":[p[0]["vacuum_normalized_residue_ratio_min"],p[0]["vacuum_normalized_residue_ratio_max"]],
