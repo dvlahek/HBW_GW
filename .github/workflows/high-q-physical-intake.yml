@@ -194,3 +194,45 @@ jobs:
           path: results/q030_recentered_local/
           if-no-files-found: warn
           retention-days: 90
+
+  exact-metric-ocean-length-sensitivity:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compare ideal C9 ocean length with independently integrated exact C1 metric
+        run: |
+          python verification/q_high_continuation/c1_metric_vs_c9_length_stress.py \
+            --output results/q_high_geometry_length_stress.json
+      - name: Enforce nonphysical surrogate interpretation
+        if: always()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("results/q_high_geometry_length_stress.json")
+          assert p.exists(), "Physical geometry stress result missing"
+          x=json.loads(p.read_text())
+          assert x["model_operator_physically_certified"] is False
+          assert x["causal_kinetic_sheet_uniquely_selected"] is False
+          assert x["radiative_strain_or_merger_excitation_computed"] is False
+          assert len(x["results"])==6
+          print("C1_GEOMETRY_C9_SURROGATE_SCOPE_GATE_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exact-C1-vs-C9-length-sensitivity
+          path: results/q_high_geometry_length_stress.json
+          retention-days: 90
+          if-no-files-found: warn
