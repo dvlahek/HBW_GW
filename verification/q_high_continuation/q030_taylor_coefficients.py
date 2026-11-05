@@ -12,7 +12,7 @@ COMPRESSED_SHA256="08bca5352c795ddf08deb410d7e4f62380d23d28f3e86cbb9cdfde0b5d8b3
 def cases():
     raw=base64.b64decode(DATA_B64)
     if hashlib.sha256(raw).hexdigest()!=COMPRESSED_SHA256:
-        raise ValueError("Spectral Taylor provenance checksum mismatch")
+        raise ValueError("Spectral Taylor provenance checksum mismatch: actual="+hashlib.sha256(raw).hexdigest()+", expected="+COMPRESSED_SHA256+", bytes="+str(len(raw)))
     data=json.loads(zlib.decompress(raw).decode())
     if set(data)!={"n641_a0","n801_a0","n801_am0005"}:
         raise ValueError("Frozen three-case physical-source grid altered")
