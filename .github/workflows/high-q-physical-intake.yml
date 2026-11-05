@@ -142,3 +142,51 @@ jobs:
           path: results/q025_global_local/
           retention-days: 90
           if-no-files-found: warn
+
+  q030-recentered-from-q025:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Recenter q030 search on independent q025 root; run 641/801 sheets
+        run: |
+          python verification/q_high_continuation/q030_recentered_global_bounded.py \
+            --output results/q030_recentered_local
+      - name: Two fixed contours on q025 centered q030 response
+        run: |
+          python verification/q_high_continuation/q030_recentered_global_winding.py \
+            --output results/q030_recentered_local/q030_recentered_winding.json
+      - name: Enforce provisional effective C9 interpretation
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          f=Path("results/q030_recentered_local/q030_recentered_global_comparison.json")
+          if not f.exists():
+              print("Q030_RECENTERED_NO_COMPLETED_GLOBAL_COMPARISON_CHECK_LOGS")
+          else:
+              x=json.loads(f.read_text())
+              assert x["physical_retarded_sheet_uniquely_selected"] is False
+              assert x["physical_q030_recentered_QNM_confirmed"] is False
+              assert x["astrophysical_detector_signal_computed"] is False
+              print("Q030_RECENTERED_NUMERICAL_ONLY",x["status"])
+          PY
+      - name: Archive candidate and negative-result numerical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q030-recentered-from-q025-three-sheets
+          path: results/q030_recentered_local/
+          if-no-files-found: warn
+          retention-days: 90
