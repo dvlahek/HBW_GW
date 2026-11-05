@@ -7,7 +7,7 @@ from pathlib import Path
 import json
 import math
 import numpy as np
-from q030_taylor_coefficients import cases
+from q030_taylor_regenerated import cases
 
 def audit():
     data=cases()
@@ -19,10 +19,10 @@ def audit():
                 print("CHILD_KEYS",name,k,sorted(v))
         summary[name]={
             "q":c["q"],"nxi":c["nxi"],
-            "physical_spectral_sha256":c["physical_spectral_sha256"],
+            "physical_spectral_sha256":c["source_spectral_sha256"],
             "taylor_order":c["taylor_order"],
             "strict_validity_radius":c["strict_validity_radius"],
-            "errors":c["errors"],
+            "errors":{"center_relative":c["center_against_exact_cauchy_relative_max"],"heldout_relative":c["worst_heldout_exact_cauchy_relative"]},
         }
     return summary
 
