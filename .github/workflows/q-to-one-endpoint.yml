@@ -38,9 +38,9 @@ jobs:
         run: |
           python - <<'PY'
           import json,glob,pathlib
-          paths=glob.glob("verification/q_to_one_endpoint/ci_results/*.json")
-          assert len(paths)==1,paths
-          j=json.loads(pathlib.Path(paths[0]).read_text())
+          path=pathlib.Path("verification/q_to_one_endpoint/ci_results/q_to_one_endpoint_audit.json")
+          assert path.is_file()
+          j=json.loads(path.read_text())
           assert j["last_published_finite_q"]==.2
           assert j["q1_transfer"]["T_equals_identity_exactly"] is True
           assert j["q1_transfer"]["thickness_M"]==0
