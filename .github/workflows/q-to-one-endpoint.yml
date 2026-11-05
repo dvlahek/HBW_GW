@@ -1,0 +1,56 @@
+name: q-to-one vacuum endpoint and source residue audit
+on:
+  pull_request:
+    paths:
+      - "verification/q_to_one_endpoint/**"
+      - ".github/workflows/q-to-one-endpoint.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  vacuum-endpoint-and-residues:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install numerical dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Input provenance and exact transfer identity tests
+        run: python -m unittest discover -s verification/q_to_one_endpoint/tests -p 'test_*.py' -v
+      - name: Numerically compute q=1 vacuum determinant and matter-root contour
+        run: |
+          python verification/q_to_one_endpoint/q_to_one_endpoint_audit.py \
+            --output verification/q_to_one_endpoint/ci_results \
+            --contour-n 32 \
+            --Rmax 80
+      - name: No synthetic finite-q >.20 pole or residue values allowed
+        run: |
+          python - <<'PY'
+          import json,glob,pathlib
+          paths=glob.glob("verification/q_to_one_endpoint/ci_results/*.json")
+          assert len(paths)==1,paths
+          j=json.loads(pathlib.Path(paths[0]).read_text())
+          assert j["last_published_finite_q"]==.2
+          assert j["q1_transfer"]["T_equals_identity_exactly"] is True
+          assert j["q1_transfer"]["thickness_M"]==0
+          assert j["q1_matter_pole_disk"]["winding_number"]==0
+          assert len(j["published_q_family"])==5
+          assert len(j["unresolved_mass_ratios"])==7
+          assert all(x["pole_status"]=="NOT COMPUTED" for x in j["unresolved_mass_ratios"])
+          assert all(x["residue_status"]=="NOT COMPUTED" for x in j["unresolved_mass_ratios"])
+          assert j["published_exterior_source_residue_ratios"]["smooth"]["q0p1"]["source_count"]==3
+          print("Q_TO_ONE_SOURCE_PROVENANCE_AND_NO_EXTRAPOLATION_PASS")
+          PY
+      - name: Archive endpoint audit not fabricated continuation
+        uses: actions/upload-artifact@v4
+        with:
+          name: q-to-one-endpoint-audit
+          path: verification/q_to_one_endpoint/ci_results/
+          retention-days: 90
