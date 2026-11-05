@@ -3,8 +3,8 @@ from __future__ import annotations
 import sys
 import unittest
 from pathlib import Path
-ROOT=Path(__file__).resolve().parents[2]
-sys.path.insert(0,str(ROOT/"verification/q_to_one_endpoint"))
+HERE=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(HERE))
 from q_to_one_endpoint_audit import (
     thickness,transfer_identity_q1,archived_observations,
     source_audit,Q_CONFIRMED,SOURCE_Q,UNRESOLVED_Q,M_POLE,VAC_POLE
