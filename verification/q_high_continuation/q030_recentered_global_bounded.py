@@ -25,7 +25,7 @@ from scipy.optimize import least_squares
 
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT/"code"))
-from q030_taylor_q030_recentered_center import cases, evaluate
+from q030_taylor_q025_center import cases, evaluate
 import hbh_phase_xxic9_final_global_smooth_qnm_v4 as c9
 
 SEED_Q025_ROOT=0.3810200143912758-0.025862906485263668j
