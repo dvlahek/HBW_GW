@@ -47,7 +47,7 @@ class HighQIntakeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp=Path(tmp)
             spectral=tmp/"nodes.npz"
-            np.savez(spectral, dummy=np.array([1]))
+            np.savez(spectral, dummy=np.arange(4096))
             bg=tmp/"physical_bg.json"
             background={
                 "q_integrated_from_background":.3,
