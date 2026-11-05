@@ -24,6 +24,9 @@ jobs:
         run: python -m pip install -r requirements.txt
       - name: Published q0.10 spectrum and missing high-q hard-denial tests
         run: python -m unittest discover -s verification/q_high_continuation/tests -p 'test_*.py' -v
+      - name: Audit frozen high-resolution q0.30 Taylor data provenance
+        run: |
+          python verification/q_high_continuation/audit_q030_taylor.py
       - name: Read and audit actual archived 80-shell q0.10 spectral nodes
         run: python verification/q_high_continuation/run_new_q.py --selftest-q010
       - name: Assert impossible high-q without physical input fails closed
