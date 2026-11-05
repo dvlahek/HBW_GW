@@ -243,6 +243,27 @@ def seed_from_predecessor(q,path):
 def run_solver(case,previous_result,outdir):
     q=case["q"]
     previous_q,seed,lams=seed_from_predecessor(q,previous_result)
+    # New q=.30 node spectra can cross dozens of real-frequency spline
+    # knots over the steps previously used for dW/domega. The original
+    # lower-half C8 interpolation is nonholomorphic across these knots:
+    # block a falsely precise QNM or gravitational residue at the outset.
+    from retarded_analyticity_gate import pack_catalog,derivative_analyticity_gate
+    spectral_gate=derivative_analyticity_gate(
+        pack_catalog(case["radial"],case["carrier"]),seed)
+    if not spectral_gate["global_QNM_residue_gate_pass"]:
+        target=Path(outdir)
+        target.mkdir(parents=True,exist_ok=True)
+        (target/f"q_{q:.3f}_BLOCKED_nonanalytic_retarded.json").write_text(
+            json.dumps({
+                "status":"BLOCKED_NONANALYTIC_RETARDED_C8",
+                "q":q,
+                "new_finite_q_root_computed":False,
+                "new_gravitational_residue_computed":False,
+                "physical_input_SHA256":case["spectral_SHA256"],
+                "diagnostics":spectral_gate,
+                "required_fix":"Validated globally analytic retarded kinetic continuation, with q>.2 quadrature and dW/domega convergence"
+            },indent=2)+"\\n")
+        raise RuntimeError("Physical q data valid but retarded C8 is nonanalytic across spectral knots: global mode/residue claim BLOCKED")
     xivc=c9.load_xivc()
     phase_ix=xivc.load_phase_ix()
     Mfun,row_names=c9.build_generic_bulk_matrix(phase_ix)
