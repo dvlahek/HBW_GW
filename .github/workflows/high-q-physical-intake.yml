@@ -1,0 +1,253 @@
+name: High-q self-consistent spectral intake preflight
+on:
+  pull_request:
+    paths:
+      - "verification/q_high_continuation/**"
+      - ".github/workflows/high-q-physical-intake.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publication-nodes-and-fail-closed-high-q:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Published q0.10 spectrum and missing high-q hard-denial tests
+        run: python -m unittest discover -s verification/q_high_continuation/tests -p 'test_*.py' -v
+      - name: Audit frozen high-resolution q0.30 Taylor data provenance
+        run: |
+          python verification/q_high_continuation/audit_q030_taylor.py
+      - name: Read and audit actual archived 80-shell q0.10 spectral nodes
+        run: python verification/q_high_continuation/run_new_q.py --selftest-q010
+      - name: Assert impossible high-q without physical input fails closed
+        run: |
+          set +e
+          python verification/q_high_continuation/run_new_q.py \
+            --manifest /tmp/MISSING_physical_q030_manifest.json \
+            --validate-only > high-q-missing.log 2>&1
+          rc=$?
+          set -e
+          if [ "$rc" -eq 0 ]; then
+            echo "ERROR: high-q continuation falsely accepted missing physical input"
+            exit 1
+          fi
+          grep -q "FileNotFoundError" high-q-missing.log || grep -q "No such file or directory" high-q-missing.log
+          echo "Q_HIGH_MISSING_REAL_EINSTEIN_VLASOV_INPUT_FAIL_CLOSED_PASS"
+
+  bounded-q030-global-diagnostic:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Evaluate fixed three-source 7x4 smooth global candidates
+        run: |
+          python verification/q_high_continuation/q030_global_bounded_candidate.py \
+            --output results/q030_global_local
+      - name: Frozen q030 retarded-sheet argument-principle numerical audit
+        run: |
+          python verification/q_high_continuation/q030_global_winding_diagnostic.py \
+            --output results/q030_global_local/q030_winding.json
+      - name: Record results without implying a physical q030 QNM
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path("results/q030_global_local/q030_global_comparison.json")
+          if path.is_file():
+              j=json.loads(path.read_text())
+              assert j["physical_retarded_sheet_uniquely_selected"] is False
+              assert j["physical_q030_QNM_confirmed"] is False
+              assert j["gravitational_residue_computed"] is False
+              assert j["astrophysical_detector_signal_computed"] is False
+              print("Q030_EXPLORATORY_NOT_AN_ASTROPHYSICAL_DETECTION")
+          else:
+              print("Q030_GLOBAL_COMPARISON_NOT_COMPLETED_OR_FAILED: check job logs")
+          PY
+      - name: Preserve candidate and negative-result audit artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q030-exploratory-global-three-sheets
+          path: results/q030_global_local/
+          if-no-files-found: warn
+          retention-days: 90
+
+  bounded-q025-global-diagnostic:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compare bounded q025 candidate roots on 641 and 801 spectra
+        run: |
+          python verification/q_high_continuation/q025_global_bounded_candidate.py \
+            --output results/q025_global_local
+      - name: Independent predeclared q025 net-winding diagnostics
+        run: |
+          python verification/q_high_continuation/q025_global_winding_diagnostic.py \
+            --output results/q025_global_local/q025_winding.json
+      - name: Conditional effective-C9 exterior source residue and W derivative audits
+        run: |
+          python verification/q_high_continuation/q025_conditional_source_residues.py \
+            --output results/q025_global_local
+      - name: Guard against unsupported interpretation of preliminary q025 results
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path("results/q025_global_local/q025_global_comparison.json")
+          if p.is_file():
+              j=json.loads(p.read_text())
+              assert j["physical_retarded_sheet_uniquely_selected"] is False
+              assert j["physical_q025_QNM_confirmed"] is False
+              assert j["gravitational_residue_computed"] is False
+              print("Q025_PRELIMINARY_NUMERICAL_ONLY",j["status"])
+          else:
+              print("Q025_GLOBAL_RESULT_INCOMPLETE_CHECK_LOGS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: q025-three-source-global-candidate-audit
+          path: results/q025_global_local/
+          retention-days: 90
+          if-no-files-found: warn
+
+  q030-recentered-from-q025:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Recenter q030 search on independent q025 root; run 641/801 sheets
+        run: |
+          python verification/q_high_continuation/q030_recentered_global_bounded.py \
+            --output results/q030_recentered_local
+      - name: Two fixed contours on q025 centered q030 response
+        run: |
+          python verification/q_high_continuation/q030_recentered_global_winding.py \
+            --output results/q030_recentered_local/q030_recentered_winding.json
+      - name: Conditional q030 exterior Green source residues and W derivative
+        run: |
+          python verification/q_high_continuation/q030_recentered_conditional_residues.py \
+            --output results/q030_recentered_local
+      - name: Enforce provisional effective C9 interpretation
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          f=Path("results/q030_recentered_local/q030_recentered_global_comparison.json")
+          if not f.exists():
+              print("Q030_RECENTERED_NO_COMPLETED_GLOBAL_COMPARISON_CHECK_LOGS")
+          else:
+              x=json.loads(f.read_text())
+              assert x["physical_retarded_sheet_uniquely_selected"] is False
+              assert x["physical_q030_recentered_QNM_confirmed"] is False
+              assert x["astrophysical_detector_signal_computed"] is False
+              print("Q030_RECENTERED_NUMERICAL_ONLY",x["status"])
+          PY
+      - name: Archive candidate and negative-result numerical evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: q030-recentered-from-q025-three-sheets
+          path: results/q030_recentered_local/
+          if-no-files-found: warn
+          retention-days: 90
+
+  exact-metric-ocean-length-sensitivity:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compare ideal C9 ocean length with independently integrated exact C1 metric
+        run: |
+          python verification/q_high_continuation/c1_metric_vs_c9_length_stress.py \
+            --output results/q_high_geometry_length_stress.json
+      - name: Source-matched vacuum 220 benchmark after exact C1 geometry-length correction
+        run: |
+          python verification/q_high_continuation/c1_c9_length_stressed_source_benchmark.py \
+            --geometry-json results/q_high_geometry_length_stress.json \
+            --out results/q_high_geometry_source
+      - name: Enforce nonphysical surrogate interpretation
+        if: always()
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          p=Path("results/q_high_geometry_length_stress.json")
+          assert p.exists(), "Physical geometry stress result missing"
+          x=json.loads(p.read_text())
+          assert x["model_operator_physically_certified"] is False
+          assert x["causal_kinetic_sheet_uniquely_selected"] is False
+          assert x["radiative_strain_or_merger_excitation_computed"] is False
+          assert len(x["results"])==6
+          res=Path("results/q_high_geometry_source/effective_C9_length_stressed_benchmark.json")
+          assert res.exists()
+          e=json.loads(res.read_text())
+          assert e["physical_metric_green_residue_confirmed"] is False
+          assert e["physical_kinetic_sheet_uniquely_selected"] is False
+          assert e["radiative_strain_at_infinity_computed"] is False
+          assert e["merger_excitation_or_SNR_calculated"] is False
+          assert len(e["results"])==6
+          print("C1_GEOMETRY_C9_SURROGATE_AND_SOURCE_BENCHMARK_SCOPE_PASS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exact-C1-vs-C9-length-sensitivity
+          path: |
+            results/q_high_geometry_length_stress.json
+            results/q_high_geometry_source/
+          retention-days: 90
+          if-no-files-found: warn
