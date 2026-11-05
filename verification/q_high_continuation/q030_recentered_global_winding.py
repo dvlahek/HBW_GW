@@ -22,7 +22,7 @@ from q030_recentered_global_bounded import (
     SEED_Q025_ROOT,OLD_Q020_LAMBDA_PAIR,SOURCES
 )
 
-CHECKS=((.003,32),(.0035,48))
+CHECKS=((.003,128),(.0035,96))
 
 
 def run(path):
