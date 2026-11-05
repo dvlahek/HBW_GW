@@ -68,6 +68,8 @@ class HighQIntakeTests(unittest.TestCase):
                 "model_family":EXPECTED_MODEL,
                 "new_self_consistent_equilibrium_constructed":False,
                 "q010_spectral_reused":False,
+                "spectral_convergence_verified":True,
+                "spectral_convergence_max_relative":.01,
                 "generator":{
                     "script_sha256":"a"*64,
                     "source_description":"actual upstream generator with documented equations",
@@ -85,6 +87,16 @@ class HighQIntakeTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,"checksum"):
                 validate_manifest(man)
             manifest["spectral_nodes"]["sha256"]=sha256(spectral)
+            manifest["spectral_convergence_max_relative"]=.25
+            man.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError,"convergence"):
+                validate_manifest(man)
+            manifest["spectral_convergence_max_relative"]=.01
+            manifest["spectral_convergence_verified"]=False
+            man.write_text(json.dumps(manifest))
+            with self.assertRaisesRegex(ValueError,"convergence"):
+                validate_manifest(man)
+            manifest["spectral_convergence_verified"]=True
             manifest["q010_spectral_reused"]=True
             man.write_text(json.dumps(manifest))
             with self.assertRaisesRegex(ValueError,"Reused"):
