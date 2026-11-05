@@ -76,10 +76,12 @@ def vacuum_D(w,Rmax=RMAX):
 
 
 def count_contour(center,radius=CONTOUR_R,n=CONTOUR_N,Rmax=RMAX):
-    """Discrete winding of the vacuum determinant on a prescribed circle.
+    """Discrete NET winding of a Riccati vacuum Wronskian on one circle.
 
-    The value is an empirical contour diagnostic, not an interval-
-    arithmetic certificate. Vary contour density and Rmax to audit.
+    This representation is generally MEROMORPHIC: winding counts
+    zeros MINUS possible Riccati poles, not certified QNM zeros alone.
+    It is a diagnostic; full disk root exclusion requires pole audits
+    or an analytic (pole-free) boundary determinant construction.
     """
     if n<16 or radius<=0:
         raise ValueError("Contour must be fixed sufficiently resolved circle")
@@ -157,7 +159,7 @@ def run(output,n=CONTOUR_N,Rmax=RMAX):
     second_contour=count_contour(M_POLE,n=2*n,Rmax=1.25*Rmax)
     if (matter_contour["winding_number"]!=0 or
         second_contour["winding_number"]!=0):
-        raise RuntimeError("Unexpected q=1 vacuum pole in q=.1 matter disk")
+        raise RuntimeError("Unexpected nonzero NET winding on q=1 vacuum disk")
     if abs(measured_vac)>=abs(measured_material):
         raise RuntimeError("Vacuum known QNM determinant is not smaller at benchmark")
     source_ratios={}
@@ -178,7 +180,10 @@ def run(output,n=CONTOUR_N,Rmax=RMAX):
         "q1_normalized_vacuum_det_at_vacuum_grav220":[measured_vac.real,measured_vac.imag],
         "q1_matter_pole_disk":matter_contour,
         "q1_matter_pole_disk_independent_resolution_check":second_contour,
-        "q1_exact_matter_branch_residue_at_fixed_old_pole":"NO distinct pole in tested q=1 vacuum disk",
+        "q1_at_old_matter_frequency_is_not_a_root":True,
+        "q1_Riccati_winding_is_only_zeros_minus_poles":True,
+        "q1_root_free_disk_not_certified":True,
+        "q1_exact_matter_branch_residue_at_fixed_old_pole":"No pole at the exact old q=.1 frequency; full disk exclusion requires pole-free determinant verification",
         "published_q_family":table,
         "published_exterior_source_residue_ratios":source_ratios,
         "unresolved_mass_ratios":[{"q":q,"ocean_length_M":thickness(q),
@@ -209,7 +214,7 @@ def run(output,n=CONTOUR_N,Rmax=RMAX):
     (output/"q_to_one_endpoint_audit.json").write_text(json.dumps(data,indent=2)+"\n")
     outrows=table+data["unresolved_mass_ratios"]+[{"q":1.,"ocean_transfer_length_M":0.,
                          "pole_status":"EXACT VACUUM ENDPOINT",
-                         "residue_status":"old matter pole absent in tested vacuum disk"}]
+                         "residue_status":"exact old matter frequency not a vacuum root; full disk not certified"}]
     with (output/"q_family_measured_vs_unresolved.csv").open("w",newline="") as f:
         fields=list(dict.fromkeys(k for r in outrows for k in r))
         w=csv.DictWriter(f,fieldnames=fields)
