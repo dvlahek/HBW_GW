@@ -116,6 +116,10 @@ jobs:
         run: |
           python verification/q_high_continuation/q025_global_winding_diagnostic.py \
             --output results/q025_global_local/q025_winding.json
+      - name: Conditional effective-C9 exterior source residue and W derivative audits
+        run: |
+          python verification/q_high_continuation/q025_conditional_source_residues.py \
+            --output results/q025_global_local
       - name: Guard against unsupported interpretation of preliminary q025 results
         if: always()
         run: |
