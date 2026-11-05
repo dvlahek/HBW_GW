@@ -166,6 +166,10 @@ jobs:
         run: |
           python verification/q_high_continuation/q030_recentered_global_winding.py \
             --output results/q030_recentered_local/q030_recentered_winding.json
+      - name: Conditional q030 exterior Green source residues and W derivative
+        run: |
+          python verification/q_high_continuation/q030_recentered_conditional_residues.py \
+            --output results/q030_recentered_local
       - name: Enforce provisional effective C9 interpretation
         if: always()
         run: |
