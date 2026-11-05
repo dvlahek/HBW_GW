@@ -97,6 +97,14 @@ def validate_manifest(path):
         raise ValueError("Cannot substitute interpolation for NEW stationary Einstein-Vlasov solution")
     if j.get("q010_spectral_reused") is not False:
         raise ValueError("Reused q=.10 response kernels are scientifically invalid")
+    # New C1-C7 reconstruction uncovered catastrophic cancellation in the
+    # original energy-integrated C4 weights near q=1. A finite SHA-locked
+    # spectral array alone does not establish a resolved source response.
+    if j.get("spectral_convergence_verified") is not True:
+        raise ValueError("High-q spectral quadrature convergence must be independently verified")
+    err=float(j.get("spectral_convergence_max_relative",float("inf")))
+    if not math.isfinite(err) or err<0 or err>.03:
+        raise ValueError("High-q source response failed frozen 3% 61-vs-81 quadrature convergence gate")
     generator=j.get("generator",{})
     if (not isinstance(generator,dict) or
         not isinstance(generator.get("script_sha256"),str) or
