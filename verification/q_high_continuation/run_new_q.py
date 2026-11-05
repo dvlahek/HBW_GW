@@ -223,9 +223,9 @@ def seed_from_predecessor(q,path):
                  complex(float(row["lambda2_re"]),float(row["lambda2_im"]))))
     doc=json.loads(Path(path).read_text())
     qold=float(doc["q"])
-    if (doc.get("status")!="FULL_NUMERICAL_GATE_PASS" or
+    if (doc.get("status")!="DOWNSTREAM_NUMERICAL_PASS_UPSTREAM_UNVERIFIED" or
         not .2<qold<q or q-qold>CONTINUATION_MAX_Q_STEP or
-        doc.get("source_physical_input_provenance_valid") is not True):
+        doc.get("source_input_sha_and_declared_physics_passed") is not True):
         raise ValueError("Predecessor must be a close ACCEPTED q>.20 independent physical continuation")
     w=complex(*doc["root_Momega"])
     lams=tuple(complex(*x) for x in doc["lambda_pair"])
@@ -267,9 +267,10 @@ def run_solver(case,previous_result,outdir):
                for x in point+smooth):
         raise RuntimeError("Nonfinite source-normalized physical Green-function residues")
     result={
-        "status":"FULL_NUMERICAL_GATE_PASS",
+        "status":"DOWNSTREAM_NUMERICAL_PASS_UPSTREAM_UNVERIFIED",
         "q":q,"previous_q":previous_q,
-        "source_physical_input_provenance_valid":True,
+        "source_input_sha_and_declared_physics_passed":True,
+        "upstream_equilibrium_constraints_independently_recomputed":False,
         "input_manifest":case["manifest"],
         "source_spectral_SHA256":case["spectral_SHA256"],
         "root_Momega":[float(w.real),float(w.imag)],
