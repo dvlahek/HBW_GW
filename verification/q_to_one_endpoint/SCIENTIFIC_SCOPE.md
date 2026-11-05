@@ -77,17 +77,23 @@ compares it with the known vacuum gravitational
 fundamental
 `Mω=0.373671684352-0.088962315642i`.
 
-If the q=1 determinant winds **zero** on the q=.1
-matter-pole disk, then that fixed complex region
-contains no q=1 vacuum root (within the numerical
-contour-method validity). This does NOT compute
-what happens to the finite-q branch at q=.9.
+At the exact original q=.1 matter-pole frequency,
+a **nonzero** q=1 vacuum determinant establishes that
+this exact frequency is *not* a vacuum eigenfrequency.
+The circular test uses a **Riccati** determinant, which
+can be MEROMORPHIC, so its zero net winding counts
+possible zeros MINUS poles. Hence a zero net winding
+is **NOT** a rigorous certification that there are
+no QNMs anywhere inside the disk. Independent 32/64
+point and Rmax=80/100 numerical checks demonstrate
+stability of this *net winding* only. Certification
+of a pole-free disk would require excluding Riccati
+poles or using an analytic full-state Wronskian.
 
-The winding count is a numerical diagnostic, not
-an interval-arithmetic theorem. We can change
-contour sampling/Rmax as independent checks,
-but never tune the contour or center to
-force a desired zero count.
+Neither the q=1 endpoint nor this diagnostic computes
+what happens to the finite-q branch at q=.9.
+Contour sampling, center and radius are not tuned
+to force a desired answer.
 
 ## Conditional mathematics of the q→1 limit
 
