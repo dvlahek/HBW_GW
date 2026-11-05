@@ -92,3 +92,49 @@ jobs:
           path: results/q030_global_local/
           if-no-files-found: warn
           retention-days: 90
+
+  bounded-q025-global-diagnostic:
+    needs: publication-nodes-and-fail-closed-high-q
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      OPENBLAS_NUM_THREADS: "1"
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install scientific dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Compare bounded q025 candidate roots on 641 and 801 spectra
+        run: |
+          python verification/q_high_continuation/q025_global_bounded_candidate.py \
+            --output results/q025_global_local
+      - name: Independent predeclared q025 net-winding diagnostics
+        run: |
+          python verification/q_high_continuation/q025_global_winding_diagnostic.py \
+            --output results/q025_global_local/q025_winding.json
+      - name: Guard against unsupported interpretation of preliminary q025 results
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,pathlib
+          p=pathlib.Path("results/q025_global_local/q025_global_comparison.json")
+          if p.is_file():
+              j=json.loads(p.read_text())
+              assert j["physical_retarded_sheet_uniquely_selected"] is False
+              assert j["physical_q025_QNM_confirmed"] is False
+              assert j["gravitational_residue_computed"] is False
+              print("Q025_PRELIMINARY_NUMERICAL_ONLY",j["status"])
+          else:
+              print("Q025_GLOBAL_RESULT_INCOMPLETE_CHECK_LOGS")
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: q025-three-source-global-candidate-audit
+          path: results/q025_global_local/
+          retention-days: 90
+          if-no-files-found: warn
