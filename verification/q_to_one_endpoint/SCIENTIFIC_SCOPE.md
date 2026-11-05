@@ -95,6 +95,37 @@ what happens to the finite-q branch at q=.9.
 Contour sampling, center and radius are not tuned
 to force a desired answer.
 
+## Independent full-state analytic Wronskian root count
+
+To remove the Riccati meromorphic loophole, the new
+`analytic_full_state_vacuum.py` numerically integrates
+the *linear Zerilli state pair* `(Z,dZ/dX)` with
+frequency-analytic initial normalization `Z=1`
+at both ends. The outer ECS integration ray is
+fixed for ALL frequencies along a chosen contour;
+it is NOT readjusted as a function of each trial ω.
+The resulting unnormalized Wronskian is analytic
+in ω on the tested neighborhood, except for
+explicit boundary-series singularities which are
+outside the published q=.1 mode disk.
+
+This provides a more meaningful argument-principle
+root-count test than the logarithmic-derivative
+Riccati method, though it remains a finite-resolution
+numerical count rather than a rigorous interval
+certificate. Use two 0.01-radius contours:
+32 points/Rmax=80 and 64 points/Rmax=100.
+Both must report zero winding and independently
+reproduce the vacuum `ell=2` fundamental within
+normalized Wronskian tolerance.
+
+A robust **zero** shows the *fixed neighborhood*
+of the q=.1 matter pole does not contain any
+Schwarzschild QNM at the q=1 endpoint.
+It does NOT preclude the finite-q branch migrating
+toward a DIFFERENT vacuum pole, vanishing in
+residue, or becoming a cut-dominated object.
+
 ## Conditional mathematics of the q→1 limit
 
 Suppose the exact *recomputed* finite-q transfer
